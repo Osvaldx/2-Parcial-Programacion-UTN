@@ -1,8 +1,9 @@
-import json
 from .funciones_especificas import *
+from .validaciones import *
+import pygame
 
 ##################################################################################################################################
-def ventana_principal(ventana:tuple)->bool:
+def ventana_menu(ventana:tuple)->bool:
     titulo = pygame.image.load("2repo/Parcial_2/imagenes/titulo.png")
     titulo = pygame.transform.scale(titulo, dimensiones_titulo)
 
@@ -47,7 +48,8 @@ def ventana_principal(ventana:tuple)->bool:
                 cord_y_botonplay = 600
                 boton_play = boton_play_normal
                 if (pos_x <= (cord_x_botonplay + 125) and pos_x >= cord_x_botonplay) and (pos_y <= (cord_y_botonplay + 125) and pos_y >= cord_y_botonplay):
-                    if nombre_recibido != "":
+                    if validar_nombre(nombre_recibido) == True:
+                        crear_json_players("2repo/Parcial_2/archivos/jugadores.json",nombre_recibido)
                         bandera = False
                         return True
                     else:
@@ -72,13 +74,28 @@ def ventana_principal(ventana:tuple)->bool:
                         else:
                             nombre_recibido = nombre_recibido
 
-        dibujar_todo(ventana,titulo,boton_play,nombre_recibido,font_nombre_texto,cord_x_botonplay,cord_y_botonplay,click)
+        ventana_menu_dibujar_todo(ventana,titulo,boton_play,nombre_recibido,font_nombre_texto,cord_x_botonplay,cord_y_botonplay,click)
         pygame.display.update() #aca se va actuializando
 
 ##################################################################################################################################
-def ventana_de_juego(ventana:tuple):
+def ventana_de_juego(ventana):
     ventana.fill(AMARILLO_PASTEL)
+    lista_preguntas = []
+    lista_correctas = []
 
+    leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_correctas)
+
+    fondo_juego = pygame.image.load("2repo/Parcial_2/imagenes/fondojuego.jpg")
+    fondo_juego = pygame.transform.scale(fondo_juego, (1000,600))
+
+    font_cronometro = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.ttf", 20)
+    clock = pygame.time.Clock() #se nivelan los fps
+    tiempo_incial = 30000
+    tiempo_referencia = pygame.time.get_ticks()
+
+    CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
+    CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
+    
     bandera = True
     while bandera:
         lista_eventos = pygame.event.get()
@@ -87,4 +104,17 @@ def ventana_de_juego(ventana:tuple):
             if evento.type == pygame.QUIT:
                 bandera = False
         
+
+        tiempo_actual = pygame.time.get_ticks()
+        tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia))/1000
+        tiempo_trascurrido = round(tiempo_trascurrido)
+        tiempo_trascurrido = str(tiempo_trascurrido) #PARA PODER PONERLE UN FUENTE A ELECCION
+
+        if tiempo_trascurrido == "0":
+            bandera = False
+
+        texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, (0,0,0))
+
+        ventana_juego_dibujar_todo(ventana,fondo_juego,CRONOMETRO_imagen,texto_cronometro)
+        clock.tick(60)
         pygame.display.update()

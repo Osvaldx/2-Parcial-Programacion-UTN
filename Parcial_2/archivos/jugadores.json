@@ -1,0 +1,14 @@
+{
+    "Players": [
+        {
+            "nombre": "nahuel",
+            "dinero": 320000,
+            "score": 800
+        },
+        {
+            "nombre": "lucas",
+            "dinero": 444777,
+            "score": 450
+        }
+    ]
+}

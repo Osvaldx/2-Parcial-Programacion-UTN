@@ -24,3 +24,24 @@ rect_y = 480
 rect_width = 200
 rect_high = 50
 ################################
+# CONFIGURACION CAJA DE PREGUNTA
+box_pregunta_x = 325
+box_pregunta_y = 500
+box_pregunta_width = 550
+box_pregunta_high = 100
+# CONFIGURACION CAJAS DE OPCIONES:
+box_respuesta_correcta_x = 610
+box_respuesta_correcta_y = 630
+
+box_respuesta_incorrecta_1_x = 220
+box_respuesta_incorrecta_1_y = 630
+
+box_respuesta_incorrecta_2_x = 220
+box_respuesta_incorrecta_2_y = 700
+
+box_respuesta_incorrecta_3_x = 610
+box_respuesta_incorrecta_3_y = 700
+
+box_respuesta_width = 350
+box_respuesta_high = 60
+################################
