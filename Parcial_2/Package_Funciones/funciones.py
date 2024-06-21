@@ -48,7 +48,7 @@ def ventana_menu(ventana:tuple)->bool:
                 cord_y_botonplay = 600
                 boton_play = boton_play_normal
                 if (pos_x <= (cord_x_botonplay + 125) and pos_x >= cord_x_botonplay) and (pos_y <= (cord_y_botonplay + 125) and pos_y >= cord_y_botonplay):
-                    if validar_nombre(nombre_recibido) == True:
+                    if validar_nombre("2repo/Parcial_2/archivos/jugadores.json",nombre_recibido) == True:
                         crear_json_players("2repo/Parcial_2/archivos/jugadores.json",nombre_recibido)
                         bandera = False
                         return True
@@ -66,7 +66,6 @@ def ventana_menu(ventana:tuple)->bool:
                     elif evento.key == pygame.K_RETURN:
                         print(nombre_recibido)
                         input_activado = False
-                        # nombre_recibido = ""
                         click = "False"
                     else:
                         if len(nombre_recibido) <= 8:

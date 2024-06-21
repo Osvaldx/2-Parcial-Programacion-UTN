@@ -33,15 +33,15 @@ def crear_json_players(path:str,nombre_recibido):
         lista_players.append(formato)
         dato_user = {
             "nombre": nombre_recibido,
-            "dinero": 320000,
-            "score": 800,
+            "dinero": 0,
+            "score": 0,
         }
         lista_players[0]["Players"].append(dato_user)
     else:
         dato_user = {
             "nombre": nombre_recibido,
-            "dinero": 444777,
-            "score": 450,
+            "dinero": 0,
+            "score": 0,
         }
         lista_players[0]["Players"].append(dato_user)
     

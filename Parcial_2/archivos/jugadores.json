@@ -1,14 +1,19 @@
 {
     "Players": [
         {
-            "nombre": "nahuel",
-            "dinero": 320000,
-            "score": 800
+            "nombre": "asd",
+            "dinero": 0,
+            "score": 0
         },
         {
-            "nombre": "lucas",
-            "dinero": 444777,
-            "score": 450
+            "nombre": "nahuel",
+            "dinero": 0,
+            "score": 0
+        },
+        {
+            "nombre": "HOLA",
+            "dinero": 0,
+            "score": 0
         }
     ]
 }
