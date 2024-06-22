@@ -4,6 +4,10 @@ import pygame
 
 ##################################################################################################################################
 def ventana_menu(ventana:tuple)->bool:
+    pygame.mixer.music.load("2repo/Parcial_2/music/MENU.mp3")
+    pygame.mixer.music.play(0,0,0)
+    pygame.mixer.music.set_volume(0.3)
+
     titulo = pygame.image.load("2repo/Parcial_2/imagenes/titulo.png")
     titulo = pygame.transform.scale(titulo, dimensiones_titulo)
 
@@ -78,23 +82,46 @@ def ventana_menu(ventana:tuple)->bool:
 
 ##################################################################################################################################
 def ventana_de_juego(ventana):
-    ventana.fill(AMARILLO_PASTEL)
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load("2repo/Parcial_2/music/RELOJ.mp3")
+    pygame.mixer.music.set_volume(0.5)
     lista_preguntas = []
     lista_correctas = []
 
     leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_correctas)
 
-    fondo_juego = pygame.image.load("2repo/Parcial_2/imagenes/fondojuego.jpg")
-    fondo_juego = pygame.transform.scale(fondo_juego, (1000,600))
+    box_no_seleccionada = pygame.image.load("2repo/Parcial_2/imagenes/opciones.png")
+    box_no_seleccionada = pygame.transform.scale(box_no_seleccionada, (270,80))
+
+    box_seleccionada = pygame.image.load("2repo/Parcial_2/imagenes/opcion_seleccionada.png")
+    box_seleccionada = pygame.transform.scale(box_seleccionada, (270,80))
+
+    box_opciones_rect = box_no_seleccionada.get_rect()
 
     font_cronometro = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.ttf", 20)
     clock = pygame.time.Clock() #se nivelan los fps
     tiempo_incial = 30000
     tiempo_referencia = pygame.time.get_ticks()
-
-    CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
-    CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
+    bandera_reloj = False
     
+    fuente = pygame.font.Font("2repo\\Parcial_2\\fonts\\Retro Gaming.ttf",25)
+
+    lista_premios = [ 
+        ["6", "  1 Millon"],
+        ["5", "$800.000"],
+        ["4", "$600.000"],
+        ["3", "$300.000"],
+        ["2", "$100.000"],
+        ["1", " $50.000"],
+    ]
+
+    ubicaciones = {
+        (600,600),
+        (290,600),
+        (290,690),
+        (600,690),
+    }
+    ubicacion_seleccionada = None
     bandera = True
     while bandera:
         lista_eventos = pygame.event.get()
@@ -102,18 +129,45 @@ def ventana_de_juego(ventana):
             print(evento)
             if evento.type == pygame.QUIT:
                 bandera = False
+                return False
+            elif evento.type == pygame.MOUSEMOTION:
+                mouse_x,mouse_y = evento.pos
+                ubicacion_seleccionada = None
+                for (ubicacion_x,ubicacion_y) in ubicaciones:
+                    box_opciones_rect = box_no_seleccionada.get_rect(topleft=(ubicacion_x,ubicacion_y))
+                    if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
+                        ubicacion_seleccionada = (ubicacion_x,ubicacion_y)
+                        break
         
-
         tiempo_actual = pygame.time.get_ticks()
-        tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia))/1000
-        tiempo_trascurrido = round(tiempo_trascurrido)
-        tiempo_trascurrido = str(tiempo_trascurrido) #PARA PODER PONERLE UN FUENTE A ELECCION
-
-        if tiempo_trascurrido == "0":
-            bandera = False
+        if bandera_reloj == False:
+            tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia))/1000
+            tiempo_trascurrido = round(tiempo_trascurrido)
+            tiempo_trascurrido = str(tiempo_trascurrido) #PARA PODER PONERLE UN FUENTE A ELECCION
+            if tiempo_trascurrido == "8":
+                pygame.mixer.music.play(0)
+            elif tiempo_trascurrido == "0":
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load("2repo/Parcial_2/music/GAMEOVER.mp3")
+                pygame.mixer.music.set_volume(1.0)
+                pygame.mixer.music.play(0,0,0)
+                bandera_reloj = True
+        else:
+            tiempo_trascurrido = "0"
+            pygame.time.delay(5000)
+            break
 
         texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, (0,0,0))
 
-        ventana_juego_dibujar_todo(ventana,fondo_juego,CRONOMETRO_imagen,texto_cronometro)
+
+        ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj)
+
+        y_de_matriz_score = 202
+        x_matriz_score= 979
+        for i in range(len(lista_premios)):
+            texto = fuente.render(lista_premios[i][1], False, NEGRO)
+            ventana.blit(texto,(x_matriz_score,y_de_matriz_score))
+            y_de_matriz_score += 53
+
         clock.tick(60)
         pygame.display.update()

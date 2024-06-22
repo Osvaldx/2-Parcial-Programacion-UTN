@@ -26,23 +26,19 @@ def crear_json_players(path:str,nombre_recibido):
         except:
             lista_players = []
     
+    dato_user = {
+            "nombre": nombre_recibido,
+            "dinero": 0,
+            "score": 0,
+        }
+    
     if lista_players == []:
         formato = {
             "Players": []
         }
         lista_players.append(formato)
-        dato_user = {
-            "nombre": nombre_recibido,
-            "dinero": 0,
-            "score": 0,
-        }
         lista_players[0]["Players"].append(dato_user)
     else:
-        dato_user = {
-            "nombre": nombre_recibido,
-            "dinero": 0,
-            "score": 0,
-        }
         lista_players[0]["Players"].append(dato_user)
     
     with open(path, "w", encoding="UTF-8") as archivo:
@@ -72,22 +68,46 @@ def leer_del_csv(path:str,lista_preguntas,lista_correctas)->None:
         lista_preguntas.append(preguntas)
         lista_correctas.append(respuestas_correctas)
 
-def ventana_juego_dibujar_todo(ventana:tuple,fondo_juego,CRONOMETRO_imagen,texto_cronometro):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj):
+    imagen_de_calavera = pygame.image.load("2repo\Parcial_2\imagenes\calavera.png")
+    imagen_de_calavera= pygame.transform.scale(imagen_de_calavera, (500, 500))
+
+    fuente_game_over = pygame.font.Font("2repo/Parcial_2/fonts/m04.TTF",80)
+    texto_game_over = fuente_game_over.render("GAME OVER", False, (167,54,0))
+    texto_game_over = fuente_game_over.render("GAME OVER", False, (255,0,0))
+
+    fondo_juego = pygame.image.load("2repo/Parcial_2/imagenes/fondojuego.jpg")
+    fondo_juego = pygame.transform.scale(fondo_juego, (1000,600))
+
+    box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
+
+    CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
+    CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
+
+    tabla_dinero = pygame.image.load("2repo/Parcial_2/imagenes/tabla.png")
+    tabla_dinero = pygame.transform.scale(tabla_dinero, (250,400))
+
+    ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
-    box_pregunta = pygame.draw.rect(ventana, CELESTE,(box_pregunta_x,box_pregunta_y,box_pregunta_width,box_pregunta_high),0,20)
-    box_pregunta_borde = pygame.draw.rect(ventana, NEGRO,(box_pregunta_x,box_pregunta_y,box_pregunta_width,box_pregunta_high),7,20)
+    pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
+    ventana.blit(box_pregunta,(350,480))
+    ubicaciones = {
+        (600,600),
+        (290,600),
+        (290,690),
+        (600,690),
+    }
+    for (ubicacion_x,ubicacion_y) in ubicaciones:
+        if (ubicacion_x,ubicacion_y) == ubicacion_seleccionada:
+            ventana.blit(box_seleccionada,(ubicacion_x,ubicacion_y))
+        else:
+            ventana.blit(box_no_seleccionada,(ubicacion_x,ubicacion_y))
 
-    variables = [
-        (box_respuesta_correcta_x, box_respuesta_correcta_y),
-        (box_respuesta_incorrecta_1_x, box_respuesta_incorrecta_1_y),
-        (box_respuesta_incorrecta_2_x, box_respuesta_incorrecta_2_y),
-        (box_respuesta_incorrecta_3_x, box_respuesta_incorrecta_3_y),
-    ]
-
-    for (rectangulo_x,rectangulo_y) in variables:
-        rectangulo_opciones = pygame.draw.rect(ventana, CELESTE, (rectangulo_x, rectangulo_y, box_respuesta_width, box_respuesta_high), 0, 20)
-        rectangulo_opciones_bordes = pygame.draw.rect(ventana, NEGRO, (rectangulo_x, rectangulo_y, box_respuesta_width, box_respuesta_high), 6, 20)
-    
-    ventana.blit(CRONOMETRO_imagen,(50,25))
-    ventana.blit(texto_cronometro, (82,75))
+    ventana.blit(tabla_dinero, (923,126))
+    ventana.blit(CRONOMETRO_imagen,(10,30))
+    ventana.blit(texto_cronometro, (42,80))
+    if bandera_reloj == True:
+        ventana.fill((0,0,0))
+        ventana.blit(texto_game_over, (230,150))
+        ventana.blit(imagen_de_calavera,(325,250))
 # #################################################################################################### #

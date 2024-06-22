@@ -1,17 +1,12 @@
 {
     "Players": [
         {
-            "nombre": "asd",
+            "nombre": "ivo",
             "dinero": 0,
             "score": 0
         },
         {
             "nombre": "nahuel",
-            "dinero": 0,
-            "score": 0
-        },
-        {
-            "nombre": "HOLA",
             "dinero": 0,
             "score": 0
         }
