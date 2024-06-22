@@ -26,6 +26,9 @@ def ventana_menu(ventana:tuple)->bool:
 
     cord_x_botonplay = 515
     cord_y_botonplay = 600
+
+    pos_x = 0
+    pos_y = 0
     
     bandera = True
     click = "False"
@@ -68,7 +71,6 @@ def ventana_menu(ventana:tuple)->bool:
                     if evento.key == pygame.K_BACKSPACE:
                         nombre_recibido = nombre_recibido[:-1]
                     elif evento.key == pygame.K_RETURN:
-                        print(nombre_recibido)
                         input_activado = False
                         click = "False"
                     else:

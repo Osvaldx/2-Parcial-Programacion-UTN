@@ -25,7 +25,8 @@ def crear_json_players(path:str,nombre_recibido):
             lista_players = [json.load(archivo)]
         except:
             lista_players = []
-    
+
+    nombre_recibido = nombre_recibido.capitalize()
     dato_user = {
             "nombre": nombre_recibido,
             "dinero": 0,

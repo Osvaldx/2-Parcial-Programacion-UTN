@@ -1,12 +1,12 @@
 {
     "Players": [
         {
-            "nombre": "ivo",
+            "nombre": "Nahuel",
             "dinero": 0,
             "score": 0
         },
         {
-            "nombre": "nahuel",
+            "nombre": "Test",
             "dinero": 0,
             "score": 0
         }
