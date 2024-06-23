@@ -55,20 +55,29 @@ def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,boton_play_rect,no
 # #################################################################################################### #
 # VENTANA DE JUEGO 2
 # #################################################################################################### #
-def leer_del_csv(path:str,lista_preguntas,lista_correctas)->None:
+def leer_del_csv(path:str,lista_preguntas,lista_respuestas)->None:
     with open(path, "r", encoding="UTF-8") as archivo:
         lineas_del_archivo = archivo.readlines()
- 
+
     for i in range(1,len(lineas_del_archivo)):
         datos = lineas_del_archivo[i]
         datos = datos.split(",")
+
         preguntas = datos[0]
+
         respuestas_correctas = datos[1]
         respuestas_correctas = respuestas_correctas.replace("\n","")
 
-        lista_preguntas.append(preguntas)
-        lista_correctas.append(respuestas_correctas)
+        no_respuestas = datos[2]
+        no_respuestas = no_respuestas.replace("-", ",")
+        no_respuestas = no_respuestas.replace("\n","")
+        no_respuestas_separadas = no_respuestas.split(",")
 
+        lista_preguntas.append(preguntas)
+        lista_respuestas.append(no_respuestas_separadas)
+
+        no_respuestas_separadas.append(respuestas_correctas)
+# ---------------------------------------------------------------------------------------------------- #
 def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones,lista_ubicaciones_fijas):
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
@@ -86,22 +95,6 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
 
         texto_de_opcion = font_opciones.render(ubicacion_opcion[1],True,NEGRO)
         ventana.blit(texto_de_opcion,(ubicacion_x + 80 ,ubicacion_y + 30))
-
-
-    # opciones_disponibles = texto_opciones.copy()
-
-    # for i in range(len(ubicaciones)):
-    #     (ubicacion_x,ubicacion_y) = ubicaciones[i]
-    #     if ((ubicacion_x,ubicacion_y)) == ubicacion_seleccionada:
-    #         ventana.blit(box_seleccionada,((ubicacion_x,ubicacion_y)))
-    #     else:
-    #         ventana.blit(box_no_seleccionada,((ubicacion_x,ubicacion_y)))
-
-    #     if opciones_disponibles:
-    #         opcion_random = random.choice(opciones_disponibles)
-    #         opciones_disponibles.remove(opcion_random)
-    #         texto_pantalla = font_opciones.render(opcion_random,True,NEGRO)
-    #         ventana.blit(texto_pantalla, (ubicacion_x + 80,ubicacion_y + 30))
 
     ventana.blit(tabla_dinero, (923,126))
     ventana.blit(CRONOMETRO_imagen,(10,30))

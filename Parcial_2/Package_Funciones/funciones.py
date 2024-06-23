@@ -77,18 +77,20 @@ def ventana_de_juego(ventana):
     pygame.mixer.music.stop()
     pygame.mixer.music.load("2repo/Parcial_2/music/RELOJ.mp3")
     pygame.mixer.music.set_volume(0.5)
-    lista_preguntas = []
-    lista_correctas = []
 
-    leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_correctas)
+    lista_preguntas = []
+    lista_respuesta = []
+
+    leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_respuesta)
     retorno = None
+
     for i in range(len(lista_preguntas)):
         font_pregunta = pygame.font.Font("2repo/Parcial_2/fonts/prstartk.ttf", 15)
 
         texto_pregunta = font_pregunta.render(lista_preguntas[i],True,NEGRO)
         box_opciones_rect = box_no_seleccionada.get_rect()
 
-        texto_opciones = ["Argentina","España","Mexico","Uruguay"]
+        texto_opciones = lista_respuesta[i]
         lista_texto_copia = texto_opciones.copy()
         lista_ubicaciones_fijas = []
 
