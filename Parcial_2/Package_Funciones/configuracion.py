@@ -28,12 +28,12 @@ rect_width = 200
 rect_high = 50
 ################################
 # CONFIGURACION DE RECTANGULOS OPCIONES:
-ubicaciones = {
+ubicaciones = [
         (600,600),
         (290,600),
         (290,690),
         (600,690),
-    }
+    ]
 ################################
 # LISTA PREMIOS TABLA
 lista_premios = [ 

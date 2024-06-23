@@ -81,15 +81,22 @@ def ventana_de_juego(ventana):
     lista_correctas = []
 
     leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_correctas)
-
-    indice_opcion = 0
     retorno = None
     for i in range(len(lista_preguntas)):
         font_pregunta = pygame.font.Font("2repo/Parcial_2/fonts/prstartk.ttf", 15)
+
         texto_pregunta = font_pregunta.render(lista_preguntas[i],True,NEGRO)
         box_opciones_rect = box_no_seleccionada.get_rect()
-        texto_opciones = font_pregunta.render(lista_correctas[indice_opcion],True,NEGRO)
-        indice_opcion += 1
+
+        texto_opciones = ["Argentina","España","Mexico","Uruguay"]
+        lista_texto_copia = texto_opciones.copy()
+        lista_ubicaciones_fijas = []
+
+        for i in range(len(ubicaciones)):
+            opcion_random = random.choice(lista_texto_copia)
+            slots = (ubicaciones[i],opcion_random)
+            lista_ubicaciones_fijas.append(slots)
+            lista_texto_copia.remove(opcion_random)
 
         font_cronometro = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.ttf", 20)
         clock = pygame.time.Clock() #se nivelan los fps
@@ -104,7 +111,6 @@ def ventana_de_juego(ventana):
         while bandera:
             lista_eventos = pygame.event.get()
             for evento in lista_eventos:
-                print(evento)
                 if evento.type == pygame.QUIT:
                     retorno = False
                     bandera = False
@@ -143,7 +149,7 @@ def ventana_de_juego(ventana):
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
 
-            ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones)
+            ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones,lista_ubicaciones_fijas)
 
             y_de_matriz_score = 202
             x_matriz_score= 979
