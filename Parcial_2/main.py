@@ -12,6 +12,8 @@ while True:
     menu_juego = ventana_menu(ventana)
     if menu_juego == True:
         juego_continuar = ventana_de_juego(ventana)
+        if juego_continuar == False:
+            break
     else:
         break
 ###########################################

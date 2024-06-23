@@ -4,11 +4,6 @@
             "nombre": "Nahuel",
             "dinero": 0,
             "score": 0
-        },
-        {
-            "nombre": "Test",
-            "dinero": 0,
-            "score": 0
         }
     ]
 }

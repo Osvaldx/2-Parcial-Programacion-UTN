@@ -1,7 +1,7 @@
 import pygame
 import json
 from .colores import *
-from .config import *
+from .configuracion import *
 
 # #################################################################################################### #
 # VENTANA DEL MENU 1
@@ -45,19 +45,18 @@ def crear_json_players(path:str,nombre_recibido):
     with open(path, "w", encoding="UTF-8") as archivo:
         json.dump(lista_players[0],archivo,indent=4,ensure_ascii=False)
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,nombre_recibido,font_texto,cord_x_botonplay,cord_y_botonplay,click):
+def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,boton_play_rect,nombre_recibido,font_texto,click):
     ventana.fill(AMARILLO_PASTEL)
     ventana.blit(titulo, (330,100))
-    ventana.blit(boton_play, (cord_x_botonplay,cord_y_botonplay))
+    ventana.blit(boton_play, (boton_play_rect.x,boton_play_rect.y))
     ventana_menu_rectangulo_nombre(ventana,click)
     ventana_menu_print_nombre(ventana,nombre_recibido,font_texto,NEGRO,rect_x,rect_y)
 # #################################################################################################### #
 # VENTANA DE JUEGO 2
 # #################################################################################################### #
 def leer_del_csv(path:str,lista_preguntas,lista_correctas)->None:
-    archivo = open(path, "r", encoding="utf-8")
-    lineas_del_archivo = archivo.readlines()
-    archivo.close
+    with open(path, "r", encoding="UTF-8") as archivo:
+        lineas_del_archivo = archivo.readlines()
  
     for i in range(1,len(lineas_del_archivo)):
         datos = lineas_del_archivo[i]
@@ -69,35 +68,15 @@ def leer_del_csv(path:str,lista_preguntas,lista_correctas)->None:
         lista_preguntas.append(preguntas)
         lista_correctas.append(respuestas_correctas)
 
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj):
-    imagen_de_calavera = pygame.image.load("2repo\Parcial_2\imagenes\calavera.png")
-    imagen_de_calavera= pygame.transform.scale(imagen_de_calavera, (500, 500))
+def mostrar_pregunta(ventana,texto_pregunta):
+    ventana.blit(texto_pregunta, (200,200))
 
-    fuente_game_over = pygame.font.Font("2repo/Parcial_2/fonts/m04.TTF",80)
-    texto_game_over = fuente_game_over.render("GAME OVER", False, (167,54,0))
-    texto_game_over = fuente_game_over.render("GAME OVER", False, (255,0,0))
-
-    fondo_juego = pygame.image.load("2repo/Parcial_2/imagenes/fondojuego.jpg")
-    fondo_juego = pygame.transform.scale(fondo_juego, (1000,600))
-
-    box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
-
-    CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
-    CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
-
-    tabla_dinero = pygame.image.load("2repo/Parcial_2/imagenes/tabla.png")
-    tabla_dinero = pygame.transform.scale(tabla_dinero, (250,400))
-
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta):
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
     pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
     ventana.blit(box_pregunta,(350,480))
-    ubicaciones = {
-        (600,600),
-        (290,600),
-        (290,690),
-        (600,690),
-    }
+    
     for (ubicacion_x,ubicacion_y) in ubicaciones:
         if (ubicacion_x,ubicacion_y) == ubicacion_seleccionada:
             ventana.blit(box_seleccionada,(ubicacion_x,ubicacion_y))
@@ -111,4 +90,5 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
         ventana.fill((0,0,0))
         ventana.blit(texto_game_over, (230,150))
         ventana.blit(imagen_de_calavera,(325,250))
+    ventana.blit(texto_pregunta, (200,200))
 # #################################################################################################### #
