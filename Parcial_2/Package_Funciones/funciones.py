@@ -82,10 +82,14 @@ def ventana_de_juego(ventana):
 
     leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_correctas)
 
+    indice_opcion = 0
+    retorno = None
     for i in range(len(lista_preguntas)):
-        font_pregunta = pygame.font.Font("2repo/Parcial_2/fonts/Pixel12x10Mono-v1.1.0.ttf", 30)
+        font_pregunta = pygame.font.Font("2repo/Parcial_2/fonts/prstartk.ttf", 15)
         texto_pregunta = font_pregunta.render(lista_preguntas[i],True,NEGRO)
         box_opciones_rect = box_no_seleccionada.get_rect()
+        texto_opciones = font_pregunta.render(lista_correctas[indice_opcion],True,NEGRO)
+        indice_opcion += 1
 
         font_cronometro = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.ttf", 20)
         clock = pygame.time.Clock() #se nivelan los fps
@@ -102,8 +106,8 @@ def ventana_de_juego(ventana):
             for evento in lista_eventos:
                 print(evento)
                 if evento.type == pygame.QUIT:
+                    retorno = False
                     bandera = False
-                    return False
                 elif evento.type == pygame.MOUSEMOTION:
                     mouse_x,mouse_y = evento.pos
                     ubicacion_seleccionada = None
@@ -129,7 +133,8 @@ def ventana_de_juego(ventana):
             else:
                 tiempo_trascurrido = "0"
                 pygame.time.delay(5000)
-                break
+                bandera = False
+                retorno = True
             
             if int(tiempo_trascurrido) >= 9:
                 color_cronometro = NEGRO
@@ -138,15 +143,17 @@ def ventana_de_juego(ventana):
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
 
-
-            ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta)
+            ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones)
 
             y_de_matriz_score = 202
             x_matriz_score= 979
             for i in range(len(lista_premios)):
                 texto = fuente.render(lista_premios[i][1], False, NEGRO)
-                ventana.blit(texto,(x_matriz_score,y_de_matriz_score))
+                if bandera_reloj == False:
+                    ventana.blit(texto,(x_matriz_score,y_de_matriz_score))
                 y_de_matriz_score += 53
 
             clock.tick(60)
             pygame.display.update()
+        
+        return retorno

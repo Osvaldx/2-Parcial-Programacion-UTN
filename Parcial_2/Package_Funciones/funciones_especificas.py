@@ -1,5 +1,6 @@
 import pygame
 import json
+import random
 from .colores import *
 from .configuracion import *
 
@@ -71,7 +72,7 @@ def leer_del_csv(path:str,lista_preguntas,lista_correctas)->None:
 def mostrar_pregunta(ventana,texto_pregunta):
     ventana.blit(texto_pregunta, (200,200))
 
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones):
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
     pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
@@ -82,13 +83,14 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
             ventana.blit(box_seleccionada,(ubicacion_x,ubicacion_y))
         else:
             ventana.blit(box_no_seleccionada,(ubicacion_x,ubicacion_y))
-
+        
+        ventana.blit(texto_opciones, (ubicacion_x + 80,ubicacion_y + 30))
     ventana.blit(tabla_dinero, (923,126))
     ventana.blit(CRONOMETRO_imagen,(10,30))
     ventana.blit(texto_cronometro, (42,80))
+    ventana.blit(texto_pregunta, (363,518))
     if bandera_reloj == True:
-        ventana.fill((0,0,0))
+        ventana.fill(NEGRO)
         ventana.blit(texto_game_over, (230,150))
         ventana.blit(imagen_de_calavera,(325,250))
-    ventana.blit(texto_pregunta, (200,200))
 # #################################################################################################### #
