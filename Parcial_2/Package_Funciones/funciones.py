@@ -2,11 +2,14 @@ from .funciones_especificas import *
 from .validaciones import *
 import pygame
 
+musica_menu = pygame.mixer.Sound(path + "music/MENU.mp3")
+sonido_gameover = pygame.mixer.Sound(path + "music/GAMEOVER.mp3")
+musica_juego = pygame.mixer.Sound(path + "music/ENJUEGO.mp3")
+
 ##################################################################################################################################
 def ventana_menu(ventana:tuple)->bool:
-    pygame.mixer.music.load("2repo/Parcial_2/music/MENU.mp3")
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.3)
+    musica_menu.set_volume(0.3)
+    musica_menu.play(-1)
 
     boton_play = boton_play_normal
     boton_play_rect = boton_play.get_rect()
@@ -14,7 +17,7 @@ def ventana_menu(ventana:tuple)->bool:
     input_activado = False
 
     font_size_nombre = 25
-    font_nombre_texto = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.TTF",font_size_nombre)
+    font_nombre_texto = pygame.font.Font(path + "fonts/Retro Gaming.TTF",font_size_nombre)
     nombre_recibido = ""
 
     pos_x = 0
@@ -45,8 +48,8 @@ def ventana_menu(ventana:tuple)->bool:
                 boton_play_rect.y = 600
                 boton_play = boton_play_normal
                 if (pos_x <= (boton_play_rect.x + 125) and pos_x >= boton_play_rect.x) and (pos_y <= (boton_play_rect.y + 125) and pos_y >= boton_play_rect.y):
-                    if validar_nombre("2repo/Parcial_2/archivos/jugadores.json",nombre_recibido) == True:
-                        crear_json_players("2repo/Parcial_2/archivos/jugadores.json",nombre_recibido)
+                    if validar_nombre(path + "archivos/jugadores.json",nombre_recibido) == True:
+                        crear_json_players(path + "archivos/jugadores.json",nombre_recibido)
                         bandera = False
                         return True
                     else:
@@ -74,39 +77,45 @@ def ventana_menu(ventana:tuple)->bool:
 
 ##################################################################################################################################
 def ventana_de_juego(ventana):
+    musica_menu.stop()
+    musica_juego.set_volume(0.2)
+    musica_juego.play(-1)
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("2repo/Parcial_2/music/RELOJ.mp3")
+    pygame.mixer.music.load(path + "music/RELOJ.mp3")
     pygame.mixer.music.set_volume(0.5)
 
     lista_preguntas = []
     lista_respuesta = []
 
-    leer_del_csv("2repo/Parcial_2/archivos/preguntas.csv",lista_preguntas,lista_respuesta)
+    leer_del_csv(path + "archivos/preguntas.csv", lista_preguntas, lista_respuesta)
+
     retorno = None
-
     for i in range(len(lista_preguntas)):
-        font_pregunta = pygame.font.Font("2repo/Parcial_2/fonts/prstartk.ttf", 15)
+        ubicacion_respuesta_elegida = None
+        paso_nivel = False
+        font_pregunta = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
 
-        texto_pregunta = font_pregunta.render(lista_preguntas[i],True,NEGRO)
+        texto_pregunta = font_pregunta.render(lista_preguntas[i], True, NEGRO)
         box_opciones_rect = box_no_seleccionada.get_rect()
 
         texto_opciones = lista_respuesta[i]
+        opcion_respuesta = lista_respuesta[i][3]
         lista_texto_copia = texto_opciones.copy()
         lista_ubicaciones_fijas = []
 
-        for i in range(len(ubicaciones)):
+        for j in range(len(ubicaciones)):
             opcion_random = random.choice(lista_texto_copia)
-            slots = (ubicaciones[i],opcion_random)
+            slots = (ubicaciones[j], opcion_random)
             lista_ubicaciones_fijas.append(slots)
             lista_texto_copia.remove(opcion_random)
 
-        font_cronometro = pygame.font.Font("2repo/Parcial_2/fonts/Retro Gaming.ttf", 20)
-        clock = pygame.time.Clock() #se nivelan los fps
+        font_cronometro = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 20)
+        clock = pygame.time.Clock()  # se nivelan los fps
         tiempo_incial = 30000
         tiempo_referencia = pygame.time.get_ticks()
         bandera_reloj = False
         
-        fuente = pygame.font.Font("2repo\\Parcial_2\\fonts\\Retro Gaming.ttf",25)
+        fuente = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 25)
 
         ubicacion_seleccionada = None
         bandera = True
@@ -117,26 +126,29 @@ def ventana_de_juego(ventana):
                     retorno = False
                     bandera = False
                 elif evento.type == pygame.MOUSEMOTION:
-                    mouse_x,mouse_y = evento.pos
+                    mouse_x, mouse_y = evento.pos
                     ubicacion_seleccionada = None
-                    for (ubicacion_x,ubicacion_y) in ubicaciones:
-                        box_opciones_rect = box_no_seleccionada.get_rect(topleft=(ubicacion_x,ubicacion_y))
-                        if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
-                            ubicacion_seleccionada = (ubicacion_x,ubicacion_y)
+                    for (ubicacion_x, ubicacion_y) in ubicaciones:
+                        box_opciones_rect = box_no_seleccionada.get_rect(topleft=(ubicacion_x, ubicacion_y))
+                        if (box_opciones_rect.collidepoint(mouse_x, mouse_y)):
+                            ubicacion_seleccionada = (ubicacion_x, ubicacion_y)
                             break
+                elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    if (box_opciones_rect.collidepoint(mouse_x, mouse_y)):
+                        ubicacion_respuesta_elegida = (ubicacion_x, ubicacion_y)
             
             tiempo_actual = pygame.time.get_ticks()
-            if bandera_reloj == False:
-                tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia))/1000
+            if bandera_reloj == False or bandera_reloj == "fallo":
+                tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia)) / 1000
                 tiempo_trascurrido = round(tiempo_trascurrido)
-                tiempo_trascurrido = str(tiempo_trascurrido) #PARA PODER PONERLE UN FUENTE A ELECCION
+                tiempo_trascurrido = str(tiempo_trascurrido)  # PARA PODER PONERLE UN FUENTE A ELECCION
                 if tiempo_trascurrido == "8":
                     pygame.mixer.music.play(0)
-                elif tiempo_trascurrido == "0":
+                elif tiempo_trascurrido == "0" or bandera_reloj == "fallo":
+                    musica_juego.stop()
                     pygame.mixer.music.stop()
-                    pygame.mixer.music.load("2repo/Parcial_2/music/GAMEOVER.mp3")
-                    pygame.mixer.music.set_volume(1.0)
-                    pygame.mixer.music.play(0,0,0)
+                    sonido_gameover.set_volume(1.0)
+                    sonido_gameover.play(0)
                     bandera_reloj = True
             else:
                 tiempo_trascurrido = "0"
@@ -151,17 +163,24 @@ def ventana_de_juego(ventana):
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
 
-            ventana_juego_dibujar_todo(ventana,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones,lista_ubicaciones_fijas)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta)
+            if siguiente_nivel == True:
+                paso_nivel = True
+                bandera = False
+            elif siguiente_nivel == "equivocado":
+                bandera_reloj = "fallo"
 
             y_de_matriz_score = 202
-            x_matriz_score= 979
-            for i in range(len(lista_premios)):
-                texto = fuente.render(lista_premios[i][1], False, NEGRO)
+            x_matriz_score = 979
+            for k in range(len(lista_premios)):
+                texto = fuente.render(lista_premios[k][1], False, NEGRO)
                 if bandera_reloj == False:
-                    ventana.blit(texto,(x_matriz_score,y_de_matriz_score))
+                    ventana.blit(texto, (x_matriz_score, y_de_matriz_score))
                 y_de_matriz_score += 53
 
             clock.tick(60)
             pygame.display.update()
-        
-        return retorno
+            ubicacion_respuesta_elegida = None
+
+        if paso_nivel == False:
+            return retorno

@@ -78,12 +78,13 @@ def leer_del_csv(path:str,lista_preguntas,lista_respuestas)->None:
 
         no_respuestas_separadas.append(respuestas_correctas)
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,texto_opciones,lista_ubicaciones_fijas):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta):
+    retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
     pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
     ventana.blit(box_pregunta,(350,480))
-    font_opciones = pygame.font.Font("2repo/Parcial_2/fonts/prstartk.ttf", 15)
+    font_opciones = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
 
     for ubicacion_opcion in lista_ubicaciones_fijas:
         (ubicacion_x,ubicacion_y) = ubicacion_opcion[0]
@@ -96,12 +97,25 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
         texto_de_opcion = font_opciones.render(ubicacion_opcion[1],True,NEGRO)
         ventana.blit(texto_de_opcion,(ubicacion_x + 80 ,ubicacion_y + 30))
 
+    if ubicacion_respuesta_elegida != None:
+        for ubicacion_respuesta in lista_ubicaciones_fijas:
+            if ubicacion_respuesta_elegida == ubicacion_respuesta[0]:
+                if opcion_respuesta == ubicacion_respuesta[1]:
+                    retorno = True
+                else:
+                    retorno = "equivocado"
+                break
+
     ventana.blit(tabla_dinero, (923,126))
     ventana.blit(CRONOMETRO_imagen,(10,30))
     ventana.blit(texto_cronometro, (42,80))
     ventana.blit(texto_pregunta, (363,518))
-    if bandera_reloj == True:
+    if (bandera_reloj == True) or bandera_reloj == "fallo":
         ventana.fill(NEGRO)
         ventana.blit(texto_game_over, (230,150))
         ventana.blit(imagen_de_calavera,(325,250))
+
+    if retorno == True or retorno == "equivocado":
+        pygame.display.update()
+        return retorno
 # #################################################################################################### #

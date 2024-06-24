@@ -2,6 +2,9 @@ import pygame
 pygame.init()
 
 ################################
+# PATH:
+path = "2repo/Parcial_2/"
+################################
 # CONFIGURACION DE VENTANA
 ventana_ancho = 1200 # X
 ventana_alto = 800 # Y
