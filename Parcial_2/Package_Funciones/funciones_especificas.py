@@ -108,17 +108,17 @@ def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiem
             jugador["dinero"] = numero
             tiempo_record = (int(tiempo_inicial) // 1000) - int(tiempo_transcurrido)
             
-            if tiempo_record <= 2:
+            if tiempo_record <= 3:
                 jugador["puntos"] += 5 # Hace referencia a lo que falta del cronometro para llegar a 30
-            elif tiempo_record <= 3:
-                jugador["puntos"] += 3
             elif tiempo_record <= 5:
-                jugador["puntos"] += 1
+                jugador["puntos"] += 3
             elif tiempo_record <= 8:
-                jugador["puntos"] += 0.5
+                jugador["puntos"] += 1
             elif tiempo_record <= 12:
-                jugador["puntos"] += 0.25
+                jugador["puntos"] += 0.5
             elif tiempo_record <= 15:
+                jugador["puntos"] += 0.25
+            elif tiempo_record <= 18:
                 jugador["puntos"] += 0.05
             else:
                 jugador["puntos"] += 0.01
@@ -126,7 +126,7 @@ def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiem
     with open(path, "w", encoding="UTF-8") as archivo:
         json.dump(lista_jugadores,archivo,indent=4,ensure_ascii=False)
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
@@ -162,6 +162,12 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
     ventana.blit(texto_cronometro, (42,80))
     ventana.blit(texto_pregunta_dividido_1, (390,515))
     ventana.blit(texto_pregunta_dividido_2, (390,540))
+    ventana.blit(cuadro_dinero,(20,650))
+    texto_dinero_banco = font_dinero.render("BANCO:",True,BLANCO)
+    texto_dinero_digito = font_dinero.render(digito_banco,True,BLANCO)
+    ventana.blit(texto_dinero_banco, (50,675))
+    ventana.blit(texto_dinero_digito, (50,700))
+    ventana.blit(globo_mensaje, (580,200))
 
     if (bandera_reloj == True) or bandera_reloj == "fallo":
         ventana.fill(NEGRO)

@@ -59,6 +59,7 @@ lista_premios = [
     ["3", "$75.000", 75000],
     ["2", "$50.000", 50000],
     ["1", " $10.000", 10000],
+    ["0", " $0", 0]
 ]
 ################################
 tablas_dinero = ['2repo/Parcial_2/imagenes/tabla.png',
@@ -109,4 +110,12 @@ CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
 
 fuente = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 25)
 titulo_premios = fuente.render("PREMIOS",True,NEGRO)
+
+cuadro_dinero = pygame.image.load(path + "imagenes/dinerocuadro.png")
+cuadro_dinero = pygame.transform.scale(cuadro_dinero,(230,100))
+
+font_dinero = pygame.font.Font(path + "fonts/prstartk.ttf",15)
+
+globo_mensaje = pygame.image.load(path + "imagenes/globomensaje.png")
+globo_mensaje = pygame.transform.scale(globo_mensaje, (180,120))
 ################################

@@ -90,6 +90,8 @@ def ventana_de_juego(ventana,nombre_recibido):
 
     retorno = None
     for i in range(len(lista_preguntas)):
+        longitud_premios = len(lista_premios)
+        digito_banco = lista_premios[longitud_premios -i -1][1]
         tiempo_record = 0
         ubicacion_respuesta_elegida = None
         paso_nivel = False
@@ -176,10 +178,10 @@ def ventana_de_juego(ventana,nombre_recibido):
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
             tiempo_record = tiempo_trascurrido
 
-            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero, digito_banco)
             y_de_matriz_score = 102
             x_matriz_score = 979
-            for k in range(len(lista_premios)):
+            for k in range(len(lista_premios) -1):
                 texto = fuente.render(lista_premios[k][1], False, NEGRO)
                 if bandera_reloj == False:
                     ventana.blit(texto, (x_matriz_score, y_de_matriz_score))
@@ -187,7 +189,7 @@ def ventana_de_juego(ventana,nombre_recibido):
 
             if siguiente_nivel == True:
                 longitud = len(lista_premios)
-                indice = longitud -i -1
+                indice = longitud -i -1 -1 # se duplica el -1 debido a que el banco y la lista de premios tiene $0 la ultima
                 actualizacion_puntos(path + "archivos/jugadores.json",lista_premios[indice][2],nombre_recibido,tiempo_record,tiempo_incial)
                 paso_nivel = True
                 bandera = False
