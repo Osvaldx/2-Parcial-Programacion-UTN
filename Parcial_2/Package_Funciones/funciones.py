@@ -2,10 +2,6 @@ from .funciones_especificas import *
 from .validaciones import *
 import pygame
 
-musica_menu = pygame.mixer.Sound(path + "music/MENU.mp3")
-sonido_gameover = pygame.mixer.Sound(path + "music/GAMEOVER.mp3")
-musica_juego = pygame.mixer.Sound(path + "music/ENJUEGO.mp3")
-
 ##################################################################################################################################
 def ventana_menu(ventana:tuple)->bool:
     musica_menu.set_volume(0.3)
@@ -83,6 +79,7 @@ def ventana_de_juego(ventana):
     pygame.mixer.music.stop()
     pygame.mixer.music.load(path + "music/RELOJ.mp3")
     pygame.mixer.music.set_volume(0.5)
+    seleccion_opcion.set_volume(0.5)
 
     lista_preguntas = []
     lista_respuesta = []
@@ -102,6 +99,8 @@ def ventana_de_juego(ventana):
         opcion_respuesta = lista_respuesta[i][3]
         lista_texto_copia = texto_opciones.copy()
         lista_ubicaciones_fijas = []
+        
+        tabla_dinero = pygame.image.load(tablas_dinero[i])
 
         for j in range(len(ubicaciones)):
             opcion_random = random.choice(lista_texto_copia)
@@ -114,10 +113,9 @@ def ventana_de_juego(ventana):
         tiempo_incial = 30000
         tiempo_referencia = pygame.time.get_ticks()
         bandera_reloj = False
-        
-        fuente = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 25)
 
         ubicacion_seleccionada = None
+        contador_musica = 0
         bandera = True
         while bandera:
             lista_eventos = pygame.event.get()
@@ -130,11 +128,19 @@ def ventana_de_juego(ventana):
                     ubicacion_seleccionada = None
                     for (ubicacion_x, ubicacion_y) in ubicaciones:
                         box_opciones_rect = box_no_seleccionada.get_rect(topleft=(ubicacion_x, ubicacion_y))
-                        if (box_opciones_rect.collidepoint(mouse_x, mouse_y)):
-                            ubicacion_seleccionada = (ubicacion_x, ubicacion_y)
+                        if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
+                            ubicacion_seleccionada = (ubicacion_x,ubicacion_y)
                             break
+
+                    if ubicacion_seleccionada != None:
+                        contador_musica += 1
+                        if contador_musica == 1:
+                            seleccion_opcion.play(0)
+                    else:
+                        contador_musica = 0
+
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
-                    if (box_opciones_rect.collidepoint(mouse_x, mouse_y)):
+                    if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
                         ubicacion_respuesta_elegida = (ubicacion_x, ubicacion_y)
             
             tiempo_actual = pygame.time.get_ticks()
@@ -163,14 +169,15 @@ def ventana_de_juego(ventana):
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
 
-            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero)
             if siguiente_nivel == True:
                 paso_nivel = True
                 bandera = False
+                pygame.mixer.music.stop()
             elif siguiente_nivel == "equivocado":
                 bandera_reloj = "fallo"
 
-            y_de_matriz_score = 202
+            y_de_matriz_score = 102
             x_matriz_score = 979
             for k in range(len(lista_premios)):
                 texto = fuente.render(lista_premios[k][1], False, NEGRO)
@@ -178,9 +185,9 @@ def ventana_de_juego(ventana):
                     ventana.blit(texto, (x_matriz_score, y_de_matriz_score))
                 y_de_matriz_score += 53
 
-            clock.tick(60)
+            clock.tick(120)
             pygame.display.update()
             ubicacion_respuesta_elegida = None
-
+        
         if paso_nivel == False:
             return retorno

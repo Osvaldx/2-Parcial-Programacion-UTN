@@ -58,9 +58,19 @@ def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,boton_play_rect,no
 def leer_del_csv(path:str,lista_preguntas,lista_respuestas)->None:
     with open(path, "r", encoding="UTF-8") as archivo:
         lineas_del_archivo = archivo.readlines()
+        lista_del_archivo_random = []
+        copia_lineas_archivo = lineas_del_archivo.copy()
+        copia_lineas_archivo.pop(0)
+        while True:
+            if copia_lineas_archivo != []:
+                texto_completo = random.choice(copia_lineas_archivo)
+                lista_del_archivo_random.append(texto_completo)
+                copia_lineas_archivo.remove(texto_completo)
+            else:
+                break
 
-    for i in range(1,len(lineas_del_archivo)):
-        datos = lineas_del_archivo[i]
+    for i in range(1,len(lista_del_archivo_random)):
+        datos = lista_del_archivo_random[i]
         datos = datos.split(",")
 
         preguntas = datos[0]
@@ -73,12 +83,13 @@ def leer_del_csv(path:str,lista_preguntas,lista_respuestas)->None:
         no_respuestas = no_respuestas.replace("\n","")
         no_respuestas_separadas = no_respuestas.split(",")
 
-        lista_preguntas.append(preguntas)
-        lista_respuestas.append(no_respuestas_separadas)
+        if len(lista_preguntas) <= 12:
+            lista_preguntas.append(preguntas)
+            lista_respuestas.append(no_respuestas_separadas)
 
         no_respuestas_separadas.append(respuestas_correctas)
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
@@ -106,7 +117,8 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
                     retorno = "equivocado"
                 break
 
-    ventana.blit(tabla_dinero, (923,126))
+    ventana.blit(tabla_dinero, (923,30))
+    ventana.blit(titulo_premios,(980,42))
     ventana.blit(CRONOMETRO_imagen,(10,30))
     ventana.blit(texto_cronometro, (42,80))
     ventana.blit(texto_pregunta, (363,518))

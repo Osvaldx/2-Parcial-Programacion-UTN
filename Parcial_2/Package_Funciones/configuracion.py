@@ -5,6 +5,12 @@ pygame.init()
 # PATH:
 path = "2repo/Parcial_2/"
 ################################
+# MUSICAS DEL JUEGO
+musica_menu = pygame.mixer.Sound(path + "music/MENU.mp3")
+sonido_gameover = pygame.mixer.Sound(path + "music/GAMEOVER.mp3")
+musica_juego = pygame.mixer.Sound(path + "music/ENJUEGO.mp3")
+seleccion_opcion = pygame.mixer.Sound(path + "music/SELECCION_MENU.mp3")
+################################
 # CONFIGURACION DE VENTANA
 ventana_ancho = 1200 # X
 ventana_alto = 800 # Y
@@ -40,13 +46,32 @@ ubicaciones = [
 ################################
 # LISTA PREMIOS TABLA
 lista_premios = [ 
-    ["6", "  1 Millon"],
-    ["5", "$800.000"],
-    ["4", "$600.000"],
-    ["3", "$300.000"],
-    ["2", "$100.000"],
-    ["1", " $50.000"],
+    ["12", "  1 Millon"],
+    ["11", "$800.000"],
+    ["10", "$650.000"],
+    ["9", "$500.000"],
+    ["8", "$350.000"],
+    ["7", "$300.000"],
+    ["6", "$200.000"],
+    ["5", "$150.000"],
+    ["4", "$100.000"],
+    ["3", "$75.000"],
+    ["2", "$50.000"],
+    ["1", " $10.000"],
 ]
+################################
+tablas_dinero = ['2repo/Parcial_2/imagenes/tabla.png',
+                    '2repo/Parcial_2/imagenes/tabla2.png',
+                    '2repo/Parcial_2/imagenes/tabla3.png',
+                    '2repo/Parcial_2/imagenes/tabla4.png',
+                    '2repo/Parcial_2/imagenes/tabla5.png',
+                    '2repo/Parcial_2/imagenes/tabla6.png',
+                    '2repo/Parcial_2/imagenes/tabla7.png',
+                    '2repo/Parcial_2/imagenes/tabla8.png',
+                    '2repo/Parcial_2/imagenes/tabla9.png',
+                    '2repo/Parcial_2/imagenes/tabla10.png',
+                    '2repo/Parcial_2/imagenes/tabla11.png',
+                    '2repo/Parcial_2/imagenes/tabla12.png']
 ################################
 # CARGA DE IMGS:
 titulo = pygame.image.load("2repo/Parcial_2/imagenes/titulo.png")
@@ -79,7 +104,6 @@ box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
 CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
 CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
 
-tabla_dinero = pygame.image.load("2repo/Parcial_2/imagenes/tabla.png")
-tabla_dinero = pygame.transform.scale(tabla_dinero, (250,400))
-
+fuente = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 25)
+titulo_premios = fuente.render("PREMIOS",True,(0,0,0))
 ################################
