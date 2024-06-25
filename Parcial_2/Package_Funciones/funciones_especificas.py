@@ -88,13 +88,24 @@ def leer_del_csv(path:str,lista_preguntas,lista_respuestas)->None:
             lista_respuestas.append(no_respuestas_separadas)
 
         no_respuestas_separadas.append(respuestas_correctas)
+def dividir_texto(texto:str):
+    retorno = texto
+    validar_arroba = texto.count("@")
+    if validar_arroba > 0:
+        texto_modificado = texto.split("@")
+        retorno = texto_modificado
+    
+    return retorno
+    
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
     pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
-    ventana.blit(box_pregunta,(350,480))
+    box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
+    box_pregunta = pygame.transform.scale(box_pregunta,(500,106))
+    ventana.blit(box_pregunta,(340,480))
     font_opciones = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
 
     for ubicacion_opcion in lista_ubicaciones_fijas:
@@ -106,7 +117,7 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
             ventana.blit(box_no_seleccionada,((ubicacion_x,ubicacion_y)))
 
         texto_de_opcion = font_opciones.render(ubicacion_opcion[1],True,NEGRO)
-        ventana.blit(texto_de_opcion,(ubicacion_x + 80 ,ubicacion_y + 30))
+        ventana.blit(texto_de_opcion,(ubicacion_x + 45 ,ubicacion_y + 30))
 
     if ubicacion_respuesta_elegida != None:
         for ubicacion_respuesta in lista_ubicaciones_fijas:
@@ -121,7 +132,9 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
     ventana.blit(titulo_premios,(980,42))
     ventana.blit(CRONOMETRO_imagen,(10,30))
     ventana.blit(texto_cronometro, (42,80))
-    ventana.blit(texto_pregunta, (363,518))
+    ventana.blit(texto_pregunta_dividido_1, (390,515))
+    ventana.blit(texto_pregunta_dividido_2, (390,540))
+
     if (bandera_reloj == True) or bandera_reloj == "fallo":
         ventana.fill(NEGRO)
         ventana.blit(texto_game_over, (230,150))

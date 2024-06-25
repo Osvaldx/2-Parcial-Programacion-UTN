@@ -74,7 +74,7 @@ def ventana_menu(ventana:tuple)->bool:
 ##################################################################################################################################
 def ventana_de_juego(ventana):
     musica_menu.stop()
-    musica_juego.set_volume(0.2)
+    musica_juego.set_volume(0.15)
     musica_juego.play(-1)
     pygame.mixer.music.stop()
     pygame.mixer.music.load(path + "music/RELOJ.mp3")
@@ -90,9 +90,12 @@ def ventana_de_juego(ventana):
     for i in range(len(lista_preguntas)):
         ubicacion_respuesta_elegida = None
         paso_nivel = False
-        font_pregunta = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
+        font_pregunta = pygame.font.Font(path + "fonts/prstartk.ttf", 16)
 
-        texto_pregunta = font_pregunta.render(lista_preguntas[i], True, NEGRO)
+        texto_de_pregunta = dividir_texto(lista_preguntas[i])
+        texto_pregunta_dividido_1 = font_pregunta.render(texto_de_pregunta[0], True, NEGRO)
+        texto_pregunta_dividido_2 = font_pregunta.render(texto_de_pregunta[1], True, NEGRO)
+
         box_opciones_rect = box_no_seleccionada.get_rect()
 
         texto_opciones = lista_respuesta[i]
@@ -169,7 +172,7 @@ def ventana_de_juego(ventana):
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
 
-            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero)
             if siguiente_nivel == True:
                 paso_nivel = True
                 bandera = False

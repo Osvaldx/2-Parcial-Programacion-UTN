@@ -99,8 +99,6 @@ box_no_seleccionada = pygame.transform.scale(box_no_seleccionada, (270,80))
 box_seleccionada = pygame.image.load("2repo/Parcial_2/imagenes/opcion_seleccionada.png")
 box_seleccionada = pygame.transform.scale(box_seleccionada, (270,80))
 
-box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
-
 CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")#hace que no se acumulen las cosas
 CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
 
