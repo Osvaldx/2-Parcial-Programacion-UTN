@@ -12,14 +12,13 @@ def ventana_menu(ventana:tuple)->bool:
     boton_play_rect.topleft = (515,600)
     input_activado = False
 
-    font_size_nombre = 25
-    font_nombre_texto = pygame.font.Font(path + "fonts/Retro Gaming.TTF",font_size_nombre)
     nombre_recibido = ""
 
     pos_x = 0
     pos_y = 0
     
     bandera = True
+    retorno = None
     click = "False"
     while bandera:
         lista_eventos = pygame.event.get()
@@ -30,7 +29,7 @@ def ventana_menu(ventana:tuple)->bool:
             elif evento.type == pygame.MOUSEMOTION:
                 pos_x = evento.pos[0]
                 pos_y = evento.pos[1]
-                if (pos_x <= (boton_play_rect.x + boton_play_rect.width) and pos_x >= boton_play_rect.x) and (pos_y <= (boton_play_rect.y + boton_play_rect.width) and pos_y >= boton_play_rect.y):
+                if (pos_x >= boton_play_rect.x and pos_x <= (boton_play_rect.x + boton_play_rect.width)) and (pos_y >= boton_play_rect.y and pos_y <= (boton_play_rect.y + boton_play_rect.width)):
                     boton_play_rect.x = 505
                     boton_play_rect.y = 590
                     boton_play = boton_play_grande
@@ -43,22 +42,24 @@ def ventana_menu(ventana:tuple)->bool:
                 boton_play_rect.x = 515
                 boton_play_rect.y = 600
                 boton_play = boton_play_normal
-                if (pos_x <= (boton_play_rect.x + 125) and pos_x >= boton_play_rect.x) and (pos_y <= (boton_play_rect.y + 125) and pos_y >= boton_play_rect.y):
+                if (pos_x >= boton_play_rect.x and pos_x <= (boton_play_rect.x + 125)) and (pos_y >= boton_play_rect.y and pos_y <= (boton_play_rect.y + 125)):
                     if validar_nombre(path + "archivos/jugadores.json",nombre_recibido) == True:
                         crear_json_players(path + "archivos/jugadores.json",nombre_recibido)
                         bandera = False
-                        return True
+                        retorno = True
+                        return retorno,nombre_recibido
                     else:
                         click = "AusenciaNICK"
                 
             elif evento.type == pygame.MOUSEBUTTONDOWN:
-                if (pos_x <= (rect_x + rect_width) and pos_x >= rect_x) and (pos_y <= (rect_y + rect_high) and pos_y >= rect_y):
+                if (pos_x >= rect_x and pos_x <= (rect_x + rect_width)) and (pos_y >= rect_y and pos_y <= (rect_y + rect_high)):
                     input_activado = True
                     click = "True"
             elif evento.type == pygame.KEYDOWN:
                 if input_activado == True:
                     if evento.key == pygame.K_BACKSPACE:
-                        nombre_recibido = nombre_recibido[:-1]
+                        longitud_nombre = len(nombre_recibido)
+                        nombre_recibido = nombre_recibido[0:longitud_nombre - 1]
                     elif evento.key == pygame.K_RETURN:
                         input_activado = False
                         click = "False"
@@ -70,9 +71,10 @@ def ventana_menu(ventana:tuple)->bool:
 
         ventana_menu_dibujar_todo(ventana,titulo,boton_play,boton_play_rect,nombre_recibido,font_nombre_texto,click)
         pygame.display.update() #aca se va actuializando
-
+        
+    return retorno,nombre_recibido
 ##################################################################################################################################
-def ventana_de_juego(ventana):
+def ventana_de_juego(ventana,nombre_recibido):
     musica_menu.stop()
     musica_juego.set_volume(0.15)
     musica_juego.play(-1)
@@ -88,6 +90,7 @@ def ventana_de_juego(ventana):
 
     retorno = None
     for i in range(len(lista_preguntas)):
+        tiempo_record = 0
         ubicacion_respuesta_elegida = None
         paso_nivel = False
         font_pregunta = pygame.font.Font(path + "fonts/prstartk.ttf", 16)
@@ -131,7 +134,7 @@ def ventana_de_juego(ventana):
                     ubicacion_seleccionada = None
                     for (ubicacion_x, ubicacion_y) in ubicaciones:
                         box_opciones_rect = box_no_seleccionada.get_rect(topleft=(ubicacion_x, ubicacion_y))
-                        if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
+                        if (mouse_x >= box_opciones_rect.x and mouse_x <= (box_opciones_rect.x + box_opciones_rect.width)) and (mouse_y >= box_opciones_rect.y and mouse_y <= (box_opciones_rect.y + box_opciones_rect.height)):
                             ubicacion_seleccionada = (ubicacion_x,ubicacion_y)
                             break
 
@@ -143,13 +146,13 @@ def ventana_de_juego(ventana):
                         contador_musica = 0
 
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
-                    if (mouse_x <= (box_opciones_rect.x + box_opciones_rect.width) and mouse_x >= box_opciones_rect.x) and (mouse_y <= (box_opciones_rect.y + box_opciones_rect.height) and mouse_y >= box_opciones_rect.y):
+                    if (mouse_x >= box_opciones_rect.x and mouse_x <= (box_opciones_rect.x + box_opciones_rect.width)) and (mouse_y >= box_opciones_rect.y and mouse_y <= (box_opciones_rect.y + box_opciones_rect.height)):
                         ubicacion_respuesta_elegida = (ubicacion_x, ubicacion_y)
             
             tiempo_actual = pygame.time.get_ticks()
             if bandera_reloj == False or bandera_reloj == "fallo":
-                tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia)) / 1000
-                tiempo_trascurrido = round(tiempo_trascurrido)
+                tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia)) // 1000
+                # tiempo_trascurrido = round(tiempo_trascurrido)
                 tiempo_trascurrido = str(tiempo_trascurrido)  # PARA PODER PONERLE UN FUENTE A ELECCION
                 if tiempo_trascurrido == "8":
                     pygame.mixer.music.play(0)
@@ -171,15 +174,9 @@ def ventana_de_juego(ventana):
                 color_cronometro = RED
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
+            tiempo_record = tiempo_trascurrido
 
             siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero)
-            if siguiente_nivel == True:
-                paso_nivel = True
-                bandera = False
-                pygame.mixer.music.stop()
-            elif siguiente_nivel == "equivocado":
-                bandera_reloj = "fallo"
-
             y_de_matriz_score = 102
             x_matriz_score = 979
             for k in range(len(lista_premios)):
@@ -187,6 +184,16 @@ def ventana_de_juego(ventana):
                 if bandera_reloj == False:
                     ventana.blit(texto, (x_matriz_score, y_de_matriz_score))
                 y_de_matriz_score += 53
+
+            if siguiente_nivel == True:
+                longitud = len(lista_premios)
+                indice = longitud -i -1
+                actualizacion_puntos(path + "archivos/jugadores.json",lista_premios[indice][2],nombre_recibido,tiempo_record,tiempo_incial)
+                paso_nivel = True
+                bandera = False
+                pygame.mixer.music.stop()
+            elif siguiente_nivel == "equivocado":
+                bandera_reloj = "fallo"
 
             clock.tick(120)
             pygame.display.update()

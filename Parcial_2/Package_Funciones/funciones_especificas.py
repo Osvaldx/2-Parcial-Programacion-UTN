@@ -17,6 +17,7 @@ def ventana_menu_rectangulo_nombre(ventana:tuple,click:str):
         color_borde = VERDE_OSCURO
     elif click == "AusenciaNICK":
         color_borde = RED
+        ventana.blit(texto_nombre_repetido, (405,555))
     pygame.draw.rect(ventana, GRIS, (rect_x,rect_y,rect_width,rect_high),0,5)
     pygame.draw.rect(ventana, color_borde, (rect_x,rect_y,rect_width,rect_high),5,5)
 # ---------------------------------------------------------------------------------------------------- #
@@ -31,7 +32,7 @@ def crear_json_players(path:str,nombre_recibido):
     dato_user = {
             "nombre": nombre_recibido,
             "dinero": 0,
-            "score": 0,
+            "puntos": 0,
         }
     
     if lista_players == []:
@@ -50,6 +51,7 @@ def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,boton_play_rect,no
     ventana.fill(AMARILLO_PASTEL)
     ventana.blit(titulo, (330,100))
     ventana.blit(boton_play, (boton_play_rect.x,boton_play_rect.y))
+    ventana.blit(texto_ingresar_nombre, (430,440))
     ventana_menu_rectangulo_nombre(ventana,click)
     ventana_menu_print_nombre(ventana,nombre_recibido,font_texto,NEGRO,rect_x,rect_y)
 # #################################################################################################### #
@@ -96,7 +98,33 @@ def dividir_texto(texto:str):
         retorno = texto_modificado
     
     return retorno
+
+def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiempo_inicial):
+    with open(path, "r", encoding="UTF-8") as archivo:
+        lista_jugadores = json.load(archivo)
+
+    for jugador in lista_jugadores["Players"]:
+        if nombre_jugador.capitalize() == jugador["nombre"]:
+            jugador["dinero"] = numero
+            tiempo_record = (int(tiempo_inicial) // 1000) - int(tiempo_transcurrido)
+            
+            if tiempo_record <= 2:
+                jugador["puntos"] += 5 # Hace referencia a lo que falta del cronometro para llegar a 30
+            elif tiempo_record <= 3:
+                jugador["puntos"] += 3
+            elif tiempo_record <= 5:
+                jugador["puntos"] += 1
+            elif tiempo_record <= 8:
+                jugador["puntos"] += 0.5
+            elif tiempo_record <= 12:
+                jugador["puntos"] += 0.25
+            elif tiempo_record <= 15:
+                jugador["puntos"] += 0.05
+            else:
+                jugador["puntos"] += 0.01
     
+    with open(path, "w", encoding="UTF-8") as archivo:
+        json.dump(lista_jugadores,archivo,indent=4,ensure_ascii=False)
 # ---------------------------------------------------------------------------------------------------- #
 def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero):
     retorno = False

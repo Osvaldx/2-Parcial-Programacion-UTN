@@ -1,4 +1,5 @@
 import pygame
+from .colores import *
 pygame.init()
 
 ################################
@@ -30,9 +31,9 @@ boton_play_grande_width = 150
 boton_play_grande_high = 150
 dimensiones_boton_grande = (boton_play_grande_width,boton_play_grande_high)
 ################################
-# CONFIGURACION DE RECTANGULO
+# CONFIGURACION DE RECTANGULO INGRESAR NOMBRE
 rect_x = 478
-rect_y = 480
+rect_y = 500
 rect_width = 200
 rect_high = 50
 ################################
@@ -46,18 +47,18 @@ ubicaciones = [
 ################################
 # LISTA PREMIOS TABLA
 lista_premios = [ 
-    ["12", "  1 Millon"],
-    ["11", "$800.000"],
-    ["10", "$650.000"],
-    ["9", "$500.000"],
-    ["8", "$350.000"],
-    ["7", "$300.000"],
-    ["6", "$200.000"],
-    ["5", "$150.000"],
-    ["4", "$100.000"],
-    ["3", "$75.000"],
-    ["2", "$50.000"],
-    ["1", " $10.000"],
+    ["12", "  1 Millon", 1000000],
+    ["11", "$800.000", 800000],
+    ["10", "$650.000", 650000],
+    ["9", "$500.000", 500000],
+    ["8", "$350.000", 350000],
+    ["7", "$300.000", 300000],
+    ["6", "$200.000", 200000],
+    ["5", "$150.000", 150000],
+    ["4", "$100.000", 100000],
+    ["3", "$75.000", 75000],
+    ["2", "$50.000", 50000],
+    ["1", " $10.000", 10000],
 ]
 ################################
 tablas_dinero = ['2repo/Parcial_2/imagenes/tabla.png',
@@ -79,6 +80,10 @@ titulo = pygame.transform.scale(titulo, dimensiones_titulo)
 
 boton_play_normal = pygame.image.load("2repo/Parcial_2/imagenes/botonjugar.png")
 boton_play_normal = pygame.transform.scale(boton_play_normal, dimnesiones_boton_normal)
+
+font_nombre_texto = pygame.font.Font(path + "fonts/Retro Gaming.TTF",25)
+texto_ingresar_nombre = font_nombre_texto.render("INGRESA TU NOMBRE",True,NEGRO)
+texto_nombre_repetido = font_nombre_texto.render("ESE NOMBRE YA EXISTE!",True,RED)
 
 boton_play_grande = pygame.image.load("2repo/Parcial_2/imagenes/botonjugar.png")
 boton_play_grande = pygame.transform.scale(boton_play_grande, dimensiones_boton_grande)
@@ -103,5 +108,5 @@ CRONOMETRO_imagen = pygame.image.load("2repo/Parcial_2/imagenes/cronometro.png")
 CRONOMETRO_imagen = pygame.transform.scale(CRONOMETRO_imagen,(90,110))
 
 fuente = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 25)
-titulo_premios = fuente.render("PREMIOS",True,(0,0,0))
+titulo_premios = fuente.render("PREMIOS",True,NEGRO)
 ################################
