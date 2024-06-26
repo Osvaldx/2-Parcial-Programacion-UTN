@@ -126,7 +126,7 @@ def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiem
     with open(path, "w", encoding="UTF-8") as archivo:
         json.dump(lista_jugadores,archivo,indent=4,ensure_ascii=False)
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco,retirarse,opcion_si_seleccionado,opcion_no_seleccionado):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
@@ -135,7 +135,7 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
     box_pregunta = pygame.transform.scale(box_pregunta,(500,106))
     ventana.blit(box_pregunta,(340,480))
     font_opciones = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
-
+    
     for ubicacion_opcion in lista_ubicaciones_fijas:
         (ubicacion_x,ubicacion_y) = ubicacion_opcion[0]
         
@@ -143,31 +143,47 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
             ventana.blit(box_seleccionada,((ubicacion_x,ubicacion_y)))
         else:
             ventana.blit(box_no_seleccionada,((ubicacion_x,ubicacion_y)))
-
+        
         texto_de_opcion = font_opciones.render(ubicacion_opcion[1],True,NEGRO)
-        ventana.blit(texto_de_opcion,(ubicacion_x + 45 ,ubicacion_y + 30))
+        if retirarse != True:
+            ventana.blit(texto_de_opcion,(ubicacion_x + 45 ,ubicacion_y + 30))
 
     if ubicacion_respuesta_elegida != None:
         for ubicacion_respuesta in lista_ubicaciones_fijas:
             if ubicacion_respuesta_elegida == ubicacion_respuesta[0]:
-                if opcion_respuesta == ubicacion_respuesta[1]:
-                    retorno = True
-                else:
-                    retorno = "equivocado"
-                break
+                if retirarse != True:
+                    if opcion_respuesta == ubicacion_respuesta[1]:
+                        retorno = True
+                    else:
+                        retorno = "equivocado"
+                    break
 
     ventana.blit(tabla_dinero, (923,30))
     ventana.blit(titulo_premios,(980,42))
     ventana.blit(CRONOMETRO_imagen,(10,30))
-    ventana.blit(texto_cronometro, (42,80))
-    ventana.blit(texto_pregunta_dividido_1, (390,515))
-    ventana.blit(texto_pregunta_dividido_2, (390,540))
+    if retirarse != True:
+        ventana.blit(texto_cronometro, (42,80))
+        ventana.blit(texto_pregunta_dividido_1, (390,515))
+        ventana.blit(texto_pregunta_dividido_2, (390,540))
     ventana.blit(cuadro_dinero,(20,650))
     texto_dinero_banco = font_dinero.render("BANCO:",True,BLANCO)
     texto_dinero_digito = font_dinero.render(digito_banco,True,BLANCO)
     ventana.blit(texto_dinero_banco, (50,675))
     ventana.blit(texto_dinero_digito, (50,700))
-    ventana.blit(globo_mensaje, (580,200))
+
+    if retirarse == True:
+        texto_retirarse = font_globito.render("¿Desea retirarse?",True,NEGRO)
+        ventana.blit(globo_mensaje, (580,200))
+        if opcion_si_seleccionado == True:
+            ventana.blit(opcion_si_globo_presionado,(610,255))
+        else:
+            ventana.blit(opcion_si_globo_normal, (610,255))
+        if opcion_no_seleccionado == True:
+            ventana.blit(opcion_no_globo_presionado,(690,255))
+        else:
+            ventana.blit(opcion_no_globo_normal,(690,255))
+
+        ventana.blit(texto_retirarse, (588,230))
 
     if (bandera_reloj == True) or bandera_reloj == "fallo":
         ventana.fill(NEGRO)

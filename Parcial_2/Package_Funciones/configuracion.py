@@ -118,4 +118,24 @@ font_dinero = pygame.font.Font(path + "fonts/prstartk.ttf",15)
 
 globo_mensaje = pygame.image.load(path + "imagenes/globomensaje.png")
 globo_mensaje = pygame.transform.scale(globo_mensaje, (180,120))
-################################
+#####################################################
+# OPCION DE RETIRARSE CONFIGURACIONES:
+ancho_boton = 50
+alto_boton = 30
+dimensiones_botones_sino = (ancho_boton,alto_boton)
+
+font_globito = pygame.font.Font(path + "fonts/prstartk.ttf",10)
+
+opcion_si_globo_normal = pygame.image.load(path + "imagenes/opcionsi.png")
+opcion_si_globo_normal = pygame.transform.scale(opcion_si_globo_normal,dimensiones_botones_sino)
+
+opcion_si_globo_presionado = pygame.image.load(path + "imagenes/opcionsi_presionado.png")
+opcion_si_globo_presionado = pygame.transform.scale(opcion_si_globo_presionado,dimensiones_botones_sino)
+
+opcion_no_globo_normal = pygame.image.load(path + "imagenes/opcionno.png")
+opcion_no_globo_normal = pygame.transform.scale(opcion_no_globo_normal,dimensiones_botones_sino)
+
+opcion_no_globo_presionado = pygame.image.load(path + "imagenes/opcionno_presionado.png")
+opcion_no_globo_presionado = pygame.transform.scale(opcion_no_globo_presionado,dimensiones_botones_sino)
+
+####################################################

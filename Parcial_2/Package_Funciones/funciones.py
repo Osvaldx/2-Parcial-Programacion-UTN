@@ -4,6 +4,7 @@ import pygame
 
 ##################################################################################################################################
 def ventana_menu(ventana:tuple)->bool:
+    musica_juego.stop()
     musica_menu.set_volume(0.3)
     musica_menu.play(-1)
 
@@ -88,7 +89,14 @@ def ventana_de_juego(ventana,nombre_recibido):
 
     leer_del_csv(path + "archivos/preguntas.csv", lista_preguntas, lista_respuesta)
 
+    opcion_si_globo_normal_rect = opcion_si_globo_normal.get_rect()
+    opcion_si_globo_normal_rect.topleft = (610,255)
+
+    opcion_no_globo_normal_rect = opcion_no_globo_normal.get_rect()
+    opcion_no_globo_normal_rect.topleft = (690,255)
+
     retorno = None
+    retirarse = False
     for i in range(len(lista_preguntas)):
         longitud_premios = len(lista_premios)
         digito_banco = lista_premios[longitud_premios -i -1][1]
@@ -124,6 +132,8 @@ def ventana_de_juego(ventana,nombre_recibido):
 
         ubicacion_seleccionada = None
         contador_musica = 0
+        opcion_si_seleccionado = False
+        opcion_no_seleccionado = False
         bandera = True
         while bandera:
             lista_eventos = pygame.event.get()
@@ -150,11 +160,26 @@ def ventana_de_juego(ventana,nombre_recibido):
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
                     if (mouse_x >= box_opciones_rect.x and mouse_x <= (box_opciones_rect.x + box_opciones_rect.width)) and (mouse_y >= box_opciones_rect.y and mouse_y <= (box_opciones_rect.y + box_opciones_rect.height)):
                         ubicacion_respuesta_elegida = (ubicacion_x, ubicacion_y)
+                    if retirarse == True:
+                        if (mouse_x >= opcion_si_globo_normal_rect.x and mouse_x <= (opcion_si_globo_normal_rect.x + opcion_si_globo_normal_rect.width)) and (mouse_y >= opcion_si_globo_normal_rect.y and mouse_y <= (opcion_si_globo_normal_rect.y + opcion_si_globo_normal_rect.height)):
+                            opcion_si_seleccionado = True
+                        if (mouse_x >= opcion_no_globo_normal_rect.x and mouse_x <= (opcion_no_globo_normal_rect.x + opcion_no_globo_normal_rect.width)) and (mouse_y >= opcion_no_globo_normal_rect.y and mouse_y <= (opcion_no_globo_normal_rect.y + opcion_no_globo_normal_rect.height)):
+                            opcion_no_seleccionado = True
+
+                elif evento.type == pygame.MOUSEBUTTONUP:
+                    if retirarse == True:
+                        if (mouse_x >= opcion_si_globo_normal_rect.x and mouse_x <= (opcion_si_globo_normal_rect.x + opcion_si_globo_normal_rect.width)) and (mouse_y >= opcion_si_globo_normal_rect.y and mouse_y <= (opcion_si_globo_normal_rect.y + opcion_si_globo_normal_rect.height)):
+                            opcion_si_seleccionado = False
+                            return True
+                        if (mouse_x >= opcion_no_globo_normal_rect.x and mouse_x <= (opcion_no_globo_normal_rect.x + opcion_no_globo_normal_rect.width)) and (mouse_y >= opcion_no_globo_normal_rect.y and mouse_y <= (opcion_no_globo_normal_rect.y + opcion_no_globo_normal_rect.height)):
+                            opcion_no_seleccionado = False
+                            retirarse = False
+                            tiempo_referencia = pygame.time.get_ticks()
+
             
             tiempo_actual = pygame.time.get_ticks()
             if bandera_reloj == False or bandera_reloj == "fallo":
                 tiempo_trascurrido = (tiempo_incial - (tiempo_actual - tiempo_referencia)) // 1000
-                # tiempo_trascurrido = round(tiempo_trascurrido)
                 tiempo_trascurrido = str(tiempo_trascurrido)  # PARA PODER PONERLE UN FUENTE A ELECCION
                 if tiempo_trascurrido == "8":
                     pygame.mixer.music.play(0)
@@ -178,7 +203,7 @@ def ventana_de_juego(ventana,nombre_recibido):
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
             tiempo_record = tiempo_trascurrido
 
-            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero, digito_banco)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero, digito_banco, retirarse, opcion_si_seleccionado, opcion_no_seleccionado)
             y_de_matriz_score = 102
             x_matriz_score = 979
             for k in range(len(lista_premios) -1):
@@ -194,6 +219,7 @@ def ventana_de_juego(ventana,nombre_recibido):
                 paso_nivel = True
                 bandera = False
                 pygame.mixer.music.stop()
+                retirarse = True
             elif siguiente_nivel == "equivocado":
                 bandera_reloj = "fallo"
 
