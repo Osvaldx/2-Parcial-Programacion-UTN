@@ -17,7 +17,8 @@ def ventana_menu_rectangulo_nombre(ventana:tuple,click:str):
         color_borde = VERDE_OSCURO
     elif click == "AusenciaNICK":
         color_borde = RED
-        ventana.blit(texto_nombre_repetido, (405,555))
+        ventana.blit(texto_nombre_repetido2, (458,558))
+        ventana.blit(texto_nombre_repetido, (455,555))
     pygame.draw.rect(ventana, GRIS, (rect_x,rect_y,rect_width,rect_high),0,5)
     pygame.draw.rect(ventana, color_borde, (rect_x,rect_y,rect_width,rect_high),5,5)
 # ---------------------------------------------------------------------------------------------------- #
@@ -48,10 +49,13 @@ def crear_json_players(path:str,nombre_recibido):
         json.dump(lista_players[0],archivo,indent=4,ensure_ascii=False)
 # ---------------------------------------------------------------------------------------------------- #
 def ventana_menu_dibujar_todo(ventana:tuple,titulo,boton_play,boton_play_rect,nombre_recibido,font_texto,click):
-    ventana.fill(AMARILLO_PASTEL)
-    ventana.blit(titulo, (330,100))
+    fondito = pygame.image.load(path + "imagenes/fondo22.jpg")
+    fondito = pygame.transform.scale(fondito,(1300,800))
+    ventana.blit(fondito,(0,0))
+    ventana.blit(titulo, (333,80))
     ventana.blit(boton_play, (boton_play_rect.x,boton_play_rect.y))
-    ventana.blit(texto_ingresar_nombre, (430,440))
+    ventana.blit(texto_ingresar_nombre2, (436,434))
+    ventana.blit(texto_ingresar_nombre, (433,430))
     ventana_menu_rectangulo_nombre(ventana,click)
     ventana_menu_print_nombre(ventana,nombre_recibido,font_texto,NEGRO,rect_x,rect_y)
 # #################################################################################################### #
@@ -110,13 +114,13 @@ def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiem
             
             if tiempo_record <= 3:
                 jugador["puntos"] += 5 # Hace referencia a lo que falta del cronometro para llegar a 30
-            elif tiempo_record <= 5:
+            elif tiempo_record <= 6:
                 jugador["puntos"] += 3
             elif tiempo_record <= 8:
                 jugador["puntos"] += 1
             elif tiempo_record <= 12:
                 jugador["puntos"] += 0.5
-            elif tiempo_record <= 15:
+            elif tiempo_record <= 16:
                 jugador["puntos"] += 0.25
             elif tiempo_record <= 18:
                 jugador["puntos"] += 0.05
@@ -125,14 +129,14 @@ def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiem
     
     with open(path, "w", encoding="UTF-8") as archivo:
         json.dump(lista_jugadores,archivo,indent=4,ensure_ascii=False)
+    
+    return lista_jugadores
 # ---------------------------------------------------------------------------------------------------- #
 def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco,retirarse,opcion_si_seleccionado,opcion_no_seleccionado):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
     pygame.draw.rect(ventana,MARRON,(100,30,1000,600),10)
-    box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
-    box_pregunta = pygame.transform.scale(box_pregunta,(500,106))
     ventana.blit(box_pregunta,(340,480))
     font_opciones = pygame.font.Font(path + "fonts/prstartk.ttf", 15)
     
@@ -194,3 +198,30 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
         pygame.display.update()
         return retorno
 # #################################################################################################### #
+def leer_json(ruta_json:str)->list[dict]:
+    with open(ruta_json, "r") as archivo:
+        contenido = json.load(archivo)
+    return contenido["Players"]
+
+def ordenar_scores(lista_participantes, opcion_ordenar:str, que_ordenar:str)->list:
+    intercambio = False
+    for j in range(len(lista_participantes)):             
+        intercambio = False                
+        for i in range(len(lista_participantes)-1 -j): 
+            if opcion_ordenar == "Asc":     
+                if lista_participantes[i][que_ordenar] > lista_participantes[i+1][que_ordenar]:        
+                    auxiliar = lista_participantes[i]
+                    lista_participantes[i] = lista_participantes[i+1]
+                    lista_participantes[i+1] = auxiliar
+                    intercambio =  True
+            else:
+                if lista_participantes[i][que_ordenar] < lista_participantes[i+1][que_ordenar]:        
+                    auxiliar = lista_participantes[i]
+                    lista_participantes[i] = lista_participantes[i+1]
+                    lista_participantes[i+1] = auxiliar
+                    intercambio =  True
+
+        if intercambio==False:             
+            break
+    return lista_participantes
+

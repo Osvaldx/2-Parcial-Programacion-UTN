@@ -14,6 +14,8 @@ while True:
         juego_continuar = ventana_de_juego(ventana,nombre_recibido)
         if juego_continuar == False:
             break
+        elif juego_continuar == "RETIRADO":
+            ventana_score(ventana)
     else:
         break
 ###########################################

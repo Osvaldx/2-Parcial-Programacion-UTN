@@ -32,7 +32,7 @@ boton_play_grande_high = 150
 dimensiones_boton_grande = (boton_play_grande_width,boton_play_grande_high)
 ################################
 # CONFIGURACION DE RECTANGULO INGRESAR NOMBRE
-rect_x = 478
+rect_x = 480
 rect_y = 500
 rect_width = 200
 rect_high = 50
@@ -83,8 +83,11 @@ boton_play_normal = pygame.image.load("2repo/Parcial_2/imagenes/botonjugar.png")
 boton_play_normal = pygame.transform.scale(boton_play_normal, dimnesiones_boton_normal)
 
 font_nombre_texto = pygame.font.Font(path + "fonts/Retro Gaming.TTF",25)
+font_texto_error = pygame.font.Font(path + "fonts/Retro Gaming.TTF",18)
 texto_ingresar_nombre = font_nombre_texto.render("INGRESA TU NOMBRE",True,NEGRO)
-texto_nombre_repetido = font_nombre_texto.render("ESE NOMBRE YA EXISTE!",True,RED)
+texto_ingresar_nombre2 = font_nombre_texto.render("INGRESA TU NOMBRE",True,VERDE_PASTEL)
+texto_nombre_repetido = font_texto_error.render("ESE NOMBRE YA EXISTE!",True,RED_FUERTE)
+texto_nombre_repetido2 = font_texto_error.render("ESE NOMBRE YA EXISTE!",True,BLANCO)
 
 boton_play_grande = pygame.image.load("2repo/Parcial_2/imagenes/botonjugar.png")
 boton_play_grande = pygame.transform.scale(boton_play_grande, dimensiones_boton_grande)
@@ -118,6 +121,9 @@ font_dinero = pygame.font.Font(path + "fonts/prstartk.ttf",15)
 
 globo_mensaje = pygame.image.load(path + "imagenes/globomensaje.png")
 globo_mensaje = pygame.transform.scale(globo_mensaje, (180,120))
+
+box_pregunta = pygame.image.load("2repo/Parcial_2/imagenes/pregunta.png")
+box_pregunta = pygame.transform.scale(box_pregunta,(500,106))
 #####################################################
 # OPCION DE RETIRARSE CONFIGURACIONES:
 ancho_boton = 50

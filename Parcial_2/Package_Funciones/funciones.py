@@ -10,7 +10,7 @@ def ventana_menu(ventana:tuple)->bool:
 
     boton_play = boton_play_normal
     boton_play_rect = boton_play.get_rect()
-    boton_play_rect.topleft = (515,600)
+    boton_play_rect.topleft = (516,600)
     input_activado = False
 
     nombre_recibido = ""
@@ -31,16 +31,16 @@ def ventana_menu(ventana:tuple)->bool:
                 pos_x = evento.pos[0]
                 pos_y = evento.pos[1]
                 if (pos_x >= boton_play_rect.x and pos_x <= (boton_play_rect.x + boton_play_rect.width)) and (pos_y >= boton_play_rect.y and pos_y <= (boton_play_rect.y + boton_play_rect.width)):
-                    boton_play_rect.x = 505
+                    boton_play_rect.x = 506
                     boton_play_rect.y = 590
                     boton_play = boton_play_grande
                 else:
-                    boton_play_rect.x = 515
+                    boton_play_rect.x = 516
                     boton_play_rect.y = 600
                     boton_play = boton_play_normal
 
             elif evento.type == pygame.MOUSEBUTTONUP:
-                boton_play_rect.x = 515
+                boton_play_rect.x = 516
                 boton_play_rect.y = 600
                 boton_play = boton_play_normal
                 if (pos_x >= boton_play_rect.x and pos_x <= (boton_play_rect.x + 125)) and (pos_y >= boton_play_rect.y and pos_y <= (boton_play_rect.y + 125)):
@@ -65,7 +65,7 @@ def ventana_menu(ventana:tuple)->bool:
                         input_activado = False
                         click = "False"
                     else:
-                        if len(nombre_recibido) <= 8:
+                        if len(nombre_recibido) <= 7:
                             nombre_recibido += evento.unicode
                         else:
                             nombre_recibido = nombre_recibido
@@ -170,7 +170,7 @@ def ventana_de_juego(ventana,nombre_recibido):
                     if retirarse == True:
                         if (mouse_x >= opcion_si_globo_normal_rect.x and mouse_x <= (opcion_si_globo_normal_rect.x + opcion_si_globo_normal_rect.width)) and (mouse_y >= opcion_si_globo_normal_rect.y and mouse_y <= (opcion_si_globo_normal_rect.y + opcion_si_globo_normal_rect.height)):
                             opcion_si_seleccionado = False
-                            return True
+                            return "RETIRADO"
                         if (mouse_x >= opcion_no_globo_normal_rect.x and mouse_x <= (opcion_no_globo_normal_rect.x + opcion_no_globo_normal_rect.width)) and (mouse_y >= opcion_no_globo_normal_rect.y and mouse_y <= (opcion_no_globo_normal_rect.y + opcion_no_globo_normal_rect.height)):
                             opcion_no_seleccionado = False
                             retirarse = False
@@ -229,3 +229,43 @@ def ventana_de_juego(ventana,nombre_recibido):
         
         if paso_nivel == False:
             return retorno
+        
+##################################################################################################################################
+def ventana_score(ventana):
+    fondo = pygame.image.load(path + "imagenes/fondoscore2.png")
+    fondo = pygame.transform.scale(fondo, (1200,800))
+    ventana.blit(fondo,(0,0))
+
+    lista_participantes = leer_json(path + "archivos/jugadores.json")
+    lista_ordenada = ordenar_scores(lista_participantes,"Desc","puntos")
+    fuente_resultados_score = pygame.font.Font(path + "fonts/prstartk.ttf",14)
+
+    x_score_mayor = 395
+    y_score_mayor = 330
+    bandera_ya_print = False
+    corriendo = True
+    while corriendo:
+        eventos = pygame.event.get()
+        for evento in eventos:
+            if evento.type == pygame.QUIT:
+                corriendo = False
+
+        if bandera_ya_print == False:
+            texto_titulo_score = "NOMBRE   |  DINERO  | PUNTOS"
+            texto_titulo_score = fuente_resultados_score.render(texto_titulo_score,True,NEGRO)
+            ventana.blit(texto_titulo_score, (x_score_mayor, y_score_mayor))
+            y_score_mayor +=40
+            for jugador in lista_ordenada[:3]:
+                nombre = jugador["nombre"]
+                dinero = jugador['dinero']
+                puntuacion = jugador['puntos']
+                texto_jugador_mayor_puntaje = f"{nombre:8} | ${dinero:7} | {puntuacion:3}"
+                texto_score_mayor = fuente_resultados_score.render(texto_jugador_mayor_puntaje, True,NEGRO)
+                ventana.blit(texto_score_mayor, (x_score_mayor, y_score_mayor))
+                y_score_mayor +=40
+            bandera_ya_print = True
+
+        pygame.display.update()
+
+
+    pygame.quit()
