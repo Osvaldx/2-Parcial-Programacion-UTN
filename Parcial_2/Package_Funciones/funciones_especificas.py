@@ -179,7 +179,6 @@ def dividir_texto(texto:str)->list[str]:
     return retorno
     
 #--------------------------------------------------------------------------------------------------
-
 def actualizacion_puntos(path,numero:int,nombre_jugador:str,tiempo_transcurrido,tiempo_inicial,clave:str)->list:
     """Esta funcion recebi como parametro un ruta de acceso, un numero, el nombre del jugador, el tiempo  y una key.
     Se encarga de asignarle un puntaje a los jugadore segun el tiempo que haya tardado en contestar la pregunta.
@@ -212,11 +211,11 @@ def actualizacion_puntos(path,numero:int,nombre_jugador:str,tiempo_transcurrido,
                 elif tiempo_record <= 12:
                     jugador["puntos"] += 0.5
                 elif tiempo_record <= 16:
-                    jugador["puntos"] += 0.25
+                    jugador["puntos"] += 0.3
                 elif tiempo_record <= 18:
-                    jugador["puntos"] += 0.05
+                    jugador["puntos"] += 0.2
                 else:
-                    jugador["puntos"] += 0.01
+                    jugador["puntos"] += 0.1
             elif clave == "reiniciar_puntos":
                 jugador["dinero"] = numero
                 jugador["puntos"] = numero
