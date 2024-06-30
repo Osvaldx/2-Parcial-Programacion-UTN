@@ -1,6 +1,16 @@
 import json
 
-def validar_nombre(path,nombre_recibido):
+def validar_nombre(path,nombre_recibido)->bool:
+    """Esta función recibe comó parametró una ruta que lo llama path y el nombre_recibido, se encarga
+    de validar que el nombre no se encuentra ya cargado, y valida que no tenga caracteres especiales
+
+    Argumentos:
+        path (_type_): Una ruta de un archivo ya predefinido
+        nombre_recibido (_type_): El nombre que introduce el usuario ya predefinido
+
+    Retorno:
+        bool: retorna bool, true o false
+    """
     retorno = False
     with open(path, "r", encoding="UTF-8") as archivo:
         try:                                            # Se espera que pase esto si el archivo json se cargo correctamente

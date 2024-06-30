@@ -3,7 +3,16 @@ from .validaciones import *
 import pygame
 
 ##################################################################################################################################
-def ventana_menu(ventana:tuple)->bool:
+def ventana_menu(ventana:tuple)->bool | str:
+    """Esta función recibe como parametros una superficie que es un tupla, y se encarga de toda la logia del menu
+    y el comportamiento con la interacción del usuario
+
+    Argumentos:
+        ventana (tuple): Una tupla ya predefinida e inicilizada
+
+    Retorna:
+        bool | str: returna un bool o str
+    """
     musica_menu.set_volume(0.1)
     musica_menu.play(-1)
 
@@ -74,7 +83,17 @@ def ventana_menu(ventana:tuple)->bool:
         
     return retorno,nombre_recibido
 ##################################################################################################################################
-def ventana_de_juego(ventana,nombre_recibido):
+def ventana_de_juego(ventana:tuple,nombre_recibido:str)->bool | str:
+    """Esta función recibe como parametros una superficie ya predefinida y un nombre_recibido que se obtuvo desde el menu
+    se encarga de toda la logica del juego cuando se encuentra el usuario ya en game
+
+    Argumentos:
+        ventana (tuple): una surface ya predefinida
+        nombre_recibido (string): _description_
+
+    Returns:
+        bool | str: Retorna una string o un bool para continuar a la siguiente pantalla
+    """
     musica_menu.stop()
     musica_juego.set_volume(0.15)
     musica_juego.play(-1)
@@ -238,7 +257,16 @@ def ventana_de_juego(ventana,nombre_recibido):
     return "GANADOR"
         
 ##################################################################################################################################
-def ventana_score(ventana):
+def ventana_score(ventana:tuple)->bool:
+    """Esta función recibe como parametrós una ventana ya predefinida, y se encarga de toda la logica de la pantalla de mostrar
+    los scores y top de jugadores
+
+    Args:
+        ventana (tuple): una tupla ya predefinida
+
+    Returns:
+        bool: retorna un bool
+    """
     musica_tabla_puntos.set_volume(0.1)
     musica_tabla_puntos.play(-1)
     fondo = pygame.image.load(path + "imagenes/fondoscore2.png")
@@ -295,7 +323,16 @@ def ventana_score(ventana):
 
 ##################################################################################################################################
 
-def ventana_ganador(ventana):
+def ventana_ganador(ventana:tuple)->bool:
+    """Esta función recibe como parametros una ventana ya predefinida e inicializada y se encarga de toda la pantalla y logica
+    de la pantalla ganadora cuando responden todas las preguntas
+
+    Argumentos:
+        ventana (tuple): una tupla ya predefinida
+
+    Returns:
+        bool: retorna un bool
+    """
     musica_juego.stop()
     musica_ganador.set_volume(0.1)
     musica_ganador.play(-1)

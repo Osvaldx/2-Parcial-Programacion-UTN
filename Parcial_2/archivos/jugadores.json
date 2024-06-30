@@ -1,24 +1,19 @@
 {
     "Players": [
         {
-            "nombre": "Ivo",
-            "dinero": 0,
-            "puntos": 0
+            "nombre": "Lucas",
+            "dinero": 1000000,
+            "puntos": 44
         },
         {
             "nombre": "Nahuel",
             "dinero": 1000000,
-            "puntos": 58
+            "puntos": 60
         },
         {
-            "nombre": "Matias",
-            "dinero": 75000,
-            "puntos": 15
-        },
-        {
-            "nombre": "Alucas",
+            "nombre": "Keru",
             "dinero": 10000,
-            "puntos": 5
+            "puntos": 3
         }
     ]
 }
