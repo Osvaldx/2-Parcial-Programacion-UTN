@@ -16,11 +16,11 @@ def ventana_menu_rectangulo_nombre(ventana:tuple,click:str):
     if click == "True":
         color_borde = VERDE_OSCURO
     elif click == "AusenciaNICK":
-        color_borde = RED
+        color_borde = ROJO
         ventana.blit(texto_nombre_repetido2, (458,558))
         ventana.blit(texto_nombre_repetido, (455,555))
-    pygame.draw.rect(ventana, GRIS, (rect_x,rect_y,rect_width,rect_high),0,5)
-    pygame.draw.rect(ventana, color_borde, (rect_x,rect_y,rect_width,rect_high),5,5)
+    pygame.draw.rect(ventana, GRIS, (rect_x,rect_y,rect_ancho,rect_alto),0,5)
+    pygame.draw.rect(ventana, color_borde, (rect_x,rect_y,rect_ancho,rect_alto),5,5)
 # ---------------------------------------------------------------------------------------------------- #
 def crear_json_players(path:str,nombre_recibido):
     with open(path, "r", encoding="UTF-8") as archivo:
@@ -103,36 +103,40 @@ def dividir_texto(texto:str):
     
     return retorno
 
-def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiempo_inicial):
+def actualizacion_puntos(path,numero:int,nombre_jugador,tiempo_transcurrido,tiempo_inicial,clave):
     with open(path, "r", encoding="UTF-8") as archivo:
         lista_jugadores = json.load(archivo)
 
     for jugador in lista_jugadores["Players"]:
         if nombre_jugador.capitalize() == jugador["nombre"]:
-            jugador["dinero"] = numero
-            tiempo_record = (int(tiempo_inicial) // 1000) - int(tiempo_transcurrido)
-            
-            if tiempo_record <= 3:
-                jugador["puntos"] += 5 # Hace referencia a lo que falta del cronometro para llegar a 30
-            elif tiempo_record <= 6:
-                jugador["puntos"] += 3
-            elif tiempo_record <= 8:
-                jugador["puntos"] += 1
-            elif tiempo_record <= 12:
-                jugador["puntos"] += 0.5
-            elif tiempo_record <= 16:
-                jugador["puntos"] += 0.25
-            elif tiempo_record <= 18:
-                jugador["puntos"] += 0.05
-            else:
-                jugador["puntos"] += 0.01
+            if clave == "actualizar_puntos":
+                jugador["dinero"] = numero
+                tiempo_record = (int(tiempo_inicial) // 1000) - int(tiempo_transcurrido)
+                
+                if tiempo_record <= 3:
+                    jugador["puntos"] += 5 # Hace referencia a lo que falta del cronometro para llegar a 30
+                elif tiempo_record <= 6:
+                    jugador["puntos"] += 3
+                elif tiempo_record <= 8:
+                    jugador["puntos"] += 1
+                elif tiempo_record <= 12:
+                    jugador["puntos"] += 0.5
+                elif tiempo_record <= 16:
+                    jugador["puntos"] += 0.25
+                elif tiempo_record <= 18:
+                    jugador["puntos"] += 0.05
+                else:
+                    jugador["puntos"] += 0.01
+            elif clave == "reiniciar_puntos":
+                jugador["dinero"] = numero
+                jugador["puntos"] = numero
     
     with open(path, "w", encoding="UTF-8") as archivo:
         json.dump(lista_jugadores,archivo,indent=4,ensure_ascii=False)
     
     return lista_jugadores
 # ---------------------------------------------------------------------------------------------------- #
-def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco,retirarse,opcion_si_seleccionado,opcion_no_seleccionado):
+def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionada,ubicacion_seleccionada,texto_cronometro,bandera_reloj,texto_pregunta_dividido_1,texto_pregunta_dividido_2,lista_ubicaciones_fijas,ubicacion_respuesta_elegida,opcion_respuesta,tabla_dinero,digito_banco,retirarse,opcion_si_seleccionado,opcion_no_seleccionado,nombre_recibido):
     retorno = False
     ventana.fill(AMARILLO_PASTEL_APAGADO)
     ventana.blit(fondo_juego, (100,30))
@@ -190,6 +194,7 @@ def ventana_juego_dibujar_todo(ventana:tuple,box_seleccionada,box_no_seleccionad
         ventana.blit(texto_retirarse, (588,230))
 
     if (bandera_reloj == True) or bandera_reloj == "fallo":
+        actualizacion_puntos(path + "archivos/jugadores.json",0,nombre_recibido,0,0,"reiniciar_puntos")
         ventana.fill(NEGRO)
         ventana.blit(texto_game_over, (230,150))
         ventana.blit(imagen_de_calavera,(325,250))
@@ -225,3 +230,15 @@ def ordenar_scores(lista_participantes, opcion_ordenar:str, que_ordenar:str)->li
             break
     return lista_participantes
 
+def dibujar_botones(ventana):
+    ventana.blit(texto_volver_menu,(520,570))
+    ventana.blit(boton_menu,(502,580))
+    ventana.blit(texto_salir,(610,660))
+    ventana.blit(boton_salir,(598,618))
+    ventana.blit(texto_opciones,(450,530))
+# #################################################################################################### #
+def dibujar_todo_ganador(ventana):
+    ventana.blit(fondo_ganador,(0,0))
+    ventana.blit(texto_you_win, (440,465))
+    ventana.blit(boton_scores,(470,590))
+    ventana.blit(texto_puntos,(588,650))

@@ -4,8 +4,7 @@ import pygame
 
 ##################################################################################################################################
 def ventana_menu(ventana:tuple)->bool:
-    musica_juego.stop()
-    musica_menu.set_volume(0.3)
+    musica_menu.set_volume(0.1)
     musica_menu.play(-1)
 
     boton_play = boton_play_normal
@@ -53,7 +52,7 @@ def ventana_menu(ventana:tuple)->bool:
                         click = "AusenciaNICK"
                 
             elif evento.type == pygame.MOUSEBUTTONDOWN:
-                if (pos_x >= rect_x and pos_x <= (rect_x + rect_width)) and (pos_y >= rect_y and pos_y <= (rect_y + rect_high)):
+                if (pos_x >= rect_x and pos_x <= (rect_x + rect_ancho)) and (pos_y >= rect_y and pos_y <= (rect_y + rect_alto)):
                     input_activado = True
                     click = "True"
             elif evento.type == pygame.KEYDOWN:
@@ -116,7 +115,10 @@ def ventana_de_juego(ventana,nombre_recibido):
         lista_texto_copia = texto_opciones.copy()
         lista_ubicaciones_fijas = []
         
-        tabla_dinero = pygame.image.load(tablas_dinero[i])
+        if tablas_dinero[i] != "FIN_PREGUNTAS":
+            tabla_dinero = pygame.image.load(tablas_dinero[i])
+        else:
+            break
 
         for j in range(len(ubicaciones)):
             opcion_random = random.choice(lista_texto_copia)
@@ -170,6 +172,7 @@ def ventana_de_juego(ventana,nombre_recibido):
                     if retirarse == True:
                         if (mouse_x >= opcion_si_globo_normal_rect.x and mouse_x <= (opcion_si_globo_normal_rect.x + opcion_si_globo_normal_rect.width)) and (mouse_y >= opcion_si_globo_normal_rect.y and mouse_y <= (opcion_si_globo_normal_rect.y + opcion_si_globo_normal_rect.height)):
                             opcion_si_seleccionado = False
+                            musica_juego.stop()
                             return "RETIRADO"
                         if (mouse_x >= opcion_no_globo_normal_rect.x and mouse_x <= (opcion_no_globo_normal_rect.x + opcion_no_globo_normal_rect.width)) and (mouse_y >= opcion_no_globo_normal_rect.y and mouse_y <= (opcion_no_globo_normal_rect.y + opcion_no_globo_normal_rect.height)):
                             opcion_no_seleccionado = False
@@ -198,12 +201,12 @@ def ventana_de_juego(ventana,nombre_recibido):
             if int(tiempo_trascurrido) >= 9:
                 color_cronometro = NEGRO
             else:
-                color_cronometro = RED
+                color_cronometro = ROJO
 
             texto_cronometro = font_cronometro.render(tiempo_trascurrido, True, color_cronometro)
             tiempo_record = tiempo_trascurrido
 
-            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero, digito_banco, retirarse, opcion_si_seleccionado, opcion_no_seleccionado)
+            siguiente_nivel = ventana_juego_dibujar_todo(ventana, box_seleccionada, box_no_seleccionada, ubicacion_seleccionada, texto_cronometro, bandera_reloj, texto_pregunta_dividido_1,texto_pregunta_dividido_2, lista_ubicaciones_fijas, ubicacion_respuesta_elegida, opcion_respuesta, tabla_dinero, digito_banco, retirarse, opcion_si_seleccionado, opcion_no_seleccionado,nombre_recibido)
             y_de_matriz_score = 102
             x_matriz_score = 979
             for k in range(len(lista_premios) -1):
@@ -215,7 +218,7 @@ def ventana_de_juego(ventana,nombre_recibido):
             if siguiente_nivel == True:
                 longitud = len(lista_premios)
                 indice = longitud -i -1 -1 # se duplica el -1 debido a que el banco y la lista de premios tiene $0 la ultima
-                actualizacion_puntos(path + "archivos/jugadores.json",lista_premios[indice][2],nombre_recibido,tiempo_record,tiempo_incial)
+                actualizacion_puntos(path + "archivos/jugadores.json",lista_premios[indice][2],nombre_recibido,tiempo_record,tiempo_incial,"actualizar_puntos")
                 paso_nivel = True
                 bandera = False
                 pygame.mixer.music.stop()
@@ -228,10 +231,16 @@ def ventana_de_juego(ventana,nombre_recibido):
             ubicacion_respuesta_elegida = None
         
         if paso_nivel == False:
+            musica_juego.stop()
             return retorno
+        
+    musica_juego.stop()
+    return "GANADOR"
         
 ##################################################################################################################################
 def ventana_score(ventana):
+    musica_tabla_puntos.set_volume(0.1)
+    musica_tabla_puntos.play(-1)
     fondo = pygame.image.load(path + "imagenes/fondoscore2.png")
     fondo = pygame.transform.scale(fondo, (1200,800))
     ventana.blit(fondo,(0,0))
@@ -244,11 +253,25 @@ def ventana_score(ventana):
     y_score_mayor = 330
     bandera_ya_print = False
     corriendo = True
+
+    boton_menu_rect = boton_menu.get_rect()
+    boton_menu_rect.topleft = (502,580)
+
+    boton_salir_rect = boton_salir.get_rect()
+    boton_salir_rect.topleft = (598,618)
+
     while corriendo:
         eventos = pygame.event.get()
         for evento in eventos:
             if evento.type == pygame.QUIT:
                 corriendo = False
+            elif evento.type == pygame.MOUSEMOTION:
+                mouse_x,mouse_y = evento.pos
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if (mouse_x >= boton_menu_rect.x and mouse_x <= (boton_menu_rect.x + boton_menu_rect.width)) and (mouse_y >= boton_menu_rect.y and mouse_y <= (boton_menu_rect.y + boton_menu_rect.height)):
+                    corriendo = False
+                if (mouse_x >= boton_salir_rect.x and mouse_x <= (boton_salir_rect.x + boton_salir_rect.width)) and (mouse_y >= boton_salir_rect.y and mouse_y <= (boton_salir_rect.y + boton_salir_rect.height)):
+                    return False
 
         if bandera_ya_print == False:
             texto_titulo_score = "NOMBRE   |  DINERO  | PUNTOS"
@@ -264,8 +287,36 @@ def ventana_score(ventana):
                 ventana.blit(texto_score_mayor, (x_score_mayor, y_score_mayor))
                 y_score_mayor +=40
             bandera_ya_print = True
+        
+        dibujar_botones(ventana)
+        pygame.display.update()
+    
+    musica_tabla_puntos.stop()
 
+##################################################################################################################################
+
+def ventana_ganador(ventana):
+    musica_juego.stop()
+    musica_ganador.set_volume(0.1)
+    musica_ganador.play(-1)
+
+    boton_scores_rect = boton_scores.get_rect()
+    boton_scores_rect.topleft = (470,590)
+
+    bandera = True
+    while bandera == True:
+        lista_evento = pygame.event.get()
+        for evento in lista_evento:
+            if evento.type == pygame.QUIT:
+                bandera= False
+            elif evento.type == pygame.MOUSEMOTION:
+                mouse_x,mouse_y = evento.pos
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if (mouse_x >= boton_scores_rect.x and mouse_x <= (boton_scores_rect.x + boton_scores_ancho)) and (mouse_y >= boton_scores_rect.y and mouse_y <= (boton_scores_rect.y + boton_scores_alto)):
+                    musica_ganador.stop()
+                    return True
+        
+        dibujar_todo_ganador(ventana)
         pygame.display.update()
 
-
-    pygame.quit()
+    musica_ganador.stop()

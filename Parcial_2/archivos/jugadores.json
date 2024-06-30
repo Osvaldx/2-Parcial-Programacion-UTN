@@ -1,44 +1,24 @@
 {
     "Players": [
         {
-            "nombre": "Nahuel",
-            "dinero": 10000,
-            "puntos": 5
-        },
-        {
-            "nombre": "Nahuel2",
-            "dinero": 75000,
-            "puntos": 13
-        },
-        {
-            "nombre": "Vv",
-            "dinero": 10000,
-            "puntos": 3
-        },
-        {
-            "nombre": "Rtrh",
+            "nombre": "Ivo",
             "dinero": 0,
             "puntos": 0
         },
         {
-            "nombre": "Ef1",
-            "dinero": 10000,
-            "puntos": 5
+            "nombre": "Nahuel",
+            "dinero": 1000000,
+            "puntos": 58
         },
         {
-            "nombre": "Test",
+            "nombre": "Matias",
             "dinero": 75000,
             "puntos": 15
         },
         {
-            "nombre": "Nss",
-            "dinero": 200000,
-            "puntos": 23.25
-        },
-        {
-            "nombre": "A",
+            "nombre": "Alucas",
             "dinero": 10000,
-            "puntos": 1
+            "puntos": 5
         }
     ]
 }

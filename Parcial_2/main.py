@@ -14,8 +14,16 @@ while True:
         juego_continuar = ventana_de_juego(ventana,nombre_recibido)
         if juego_continuar == False:
             break
+        elif juego_continuar == "GANADOR":
+            retorno_ganador = ventana_ganador(ventana)
+            if retorno_ganador == True:
+                pantalla_puntos = ventana_score(ventana)
+                if pantalla_puntos == False:
+                    break
         elif juego_continuar == "RETIRADO":
-            ventana_score(ventana)
+            pantalla_puntos = ventana_score(ventana)
+            if pantalla_puntos == False:
+                break
     else:
         break
 ###########################################
