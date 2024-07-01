@@ -7,10 +7,10 @@ Este proyecto fue desarrollado por **Nahuel Osvaldo Romano** y **Lucas Agustín 
 El objetivo de este proyecto es demostrar nuestros conocimientos y habilidades en programación, diseñando un juego utilizando la biblioteca de Python para videojuegos, **PyGame**.
 
 ## Descripción del Juego
-Nuestro juego es una versión personalizada del famoso juego "¿Quién quiere ser Millonario?". Consiste en una trivia de preguntas con temas variados y niveles de dificultad diversos. El jugador puede optar por continuar jugando o retirarse con el monto acumulado después de cada respuesta correcta.
+Nuestro juego es una versión personalizada del famoso juego "¿Quién quiere ser Millonario?". Consiste en mostrarle al usuario preguntas con temas variados y niveles de dificultad diversos. El jugador puede votar por continuar jugando o retirarse con el dinero ganado después de cada respuesta correcta.
 
 ### Características Principales
-- **Preguntas Aleatorias**: Las preguntas cubren una amplia variedad de temas.
+- **Preguntas Aleatorias**: Las preguntas son aleatorias en toda la partida y de distintos temas.
 - **Decisión del Jugador**: Después de cada respuesta correcta, el jugador puede decidir si quiere seguir jugando o retirarse.
 - **Diversidad de Dificultad**: Las preguntas varían en dificultad.
 - **Sistema de Puntuación**: Los puntos se asignan en base al tiempo de respuesta y se comparan para determinar si el jugador entra en el ranking de los tres mejores.
@@ -20,9 +20,9 @@ Nuestro juego es una versión personalizada del famoso juego "¿Quién quiere se
 - **Cronómetro**: Muestra el tiempo restante para responder cada pregunta.
 - **Presentador**: Un personaje que guía al jugador durante el juego.
 - **Preguntas y Respuestas**: Con opciones múltiples, de las cuales solo una es correcta.
-- **Tabla de Premios**: Visualiza el monto acumulado por el jugador.
-- **Banco de Dinero**: Muestra el dinero acumulado hasta el momento.
-- **Indicador de Pérdida**: Si el tiempo se agota o la respuesta es incorrecta, aparece una imagen de una calavera y se escucha una voz escalofriante indicando que el jugador ha perdido.
+- **Tabla de Premios**: Visualiza el dinero que va a ganar si responde esa pregunta correcta.
+- **Banco de Dinero**: Muestra el dinero que gano hasta el momento.
+- **Indicador de Pérdida**: Si el tiempo se termina o la respuesta es incorrecta, aparece una imagen de una calavera y se escucha una voz escalofriante indicando que el jugador ha perdido.
 
 ## Capturas de Pantalla
 A continuación, algunas imágenes del juego:
