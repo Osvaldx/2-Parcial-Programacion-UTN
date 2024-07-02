@@ -148,7 +148,6 @@ def ventana_de_juego(ventana:tuple,nombre_recibido:str)->bool | str:
         font_cronometro = pygame.font.Font(path + "fonts/Retro Gaming.ttf", 20)
         clock = pygame.time.Clock()  # se nivelan los fps
         tiempo_incial = 30000
-        tiempo_espera_inicial = 5000
         tiempo_referencia = pygame.time.get_ticks()
         bandera_reloj = False
 
@@ -214,11 +213,9 @@ def ventana_de_juego(ventana:tuple,nombre_recibido:str)->bool | str:
                     bandera_reloj = True
             else:
                 tiempo_trascurrido = "0"
-                tiempo_espera_transcurrido = pygame.time.get_ticks() - tiempo_referencia
-                tiempo_espera_total = (tiempo_espera_inicial - tiempo_espera_transcurrido)
-                if tiempo_espera_total <= 0: # pantalla de game over
-                    bandera = False
-                    retorno = True
+                pygame.time.delay(5000)
+                bandera = False
+                retorno = True
             
             if int(tiempo_trascurrido) >= 9:
                 color_cronometro = NEGRO
