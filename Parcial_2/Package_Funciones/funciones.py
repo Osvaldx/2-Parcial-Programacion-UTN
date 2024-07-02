@@ -216,7 +216,7 @@ def ventana_de_juego(ventana:tuple,nombre_recibido:str)->bool | str:
                 tiempo_trascurrido = "0"
                 tiempo_espera_transcurrido = pygame.time.get_ticks() - tiempo_referencia
                 tiempo_espera_total = (tiempo_espera_inicial - tiempo_espera_transcurrido)
-                if tiempo_espera_total <= 0:
+                if tiempo_espera_total <= 0: # pantalla de game over
                     bandera = False
                     retorno = True
             
