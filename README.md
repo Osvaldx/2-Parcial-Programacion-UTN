@@ -1,7 +1,5 @@
 # Proyecto: ¿Quién quiere ser Millonario? en PyGame
 
-## Desarrolladores
-
 ## Objetivo
 El objetivo de este proyecto es demostrar nuestros conocimientos y habilidades en programación, diseñando un juego utilizando la biblioteca de Python para videojuegos, **PyGame**.
 
