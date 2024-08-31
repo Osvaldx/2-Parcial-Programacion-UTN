@@ -1,7 +1,6 @@
 # Proyecto: ¿Quién quiere ser Millonario? en PyGame
 
 ## Desarrolladores
-Este proyecto fue desarrollado por **Nahuel Osvaldo Romano** y **Lucas Agustín Schurkens**, estudiantes de la Tecnicatura Universitaria en Programación en la Universidad Tecnológica Nacional.
 
 ## Objetivo
 El objetivo de este proyecto es demostrar nuestros conocimientos y habilidades en programación, diseñando un juego utilizando la biblioteca de Python para videojuegos, **PyGame**.
